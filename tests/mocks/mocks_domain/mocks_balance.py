@@ -15,7 +15,7 @@ def mock_balance_generate(mock_account, mock_person, mock_expense, mock_revenue)
 
     def make_mock(
         id: Optional[BalanceUUID] = None,
-        amount: Optional[float] = None,
+        value: Optional[float] = None,
         accounts: Optional[List[Account]] = None,
         person: Optional[Person] = None,
         month: Optional[int] = None,
@@ -26,7 +26,7 @@ def mock_balance_generate(mock_account, mock_person, mock_expense, mock_revenue)
     ):
         balance = Balance(
             id=id or BalanceUUID(),
-            amount=amount or random.uniform(0.0, 1000.0),
+            value=value or random.uniform(0.0, 1000.0),
             accounts=accounts or [mock_account],
             person=person or mock_person,
             month=month or random.choice([i for i in range(1, 12)]),
