@@ -11,7 +11,7 @@ from calculations.domain.entities.revenues import Revenue
 @dataclass
 class Balance:
     id: BalanceUUID
-    amount: float
+    value: float
     accounts: List[Account]
     person: Person
     month: int
@@ -21,7 +21,7 @@ class Balance:
     revenues: Optional[List[Revenue]]
 
     def __str__(self):
-        return f"<Balance of {self.month}/{self.year} amount - R$: {self.amount}"
+        return f"<Balance of {self.month}/{self.year} amount - R$: {self.value}"
 
-    def balance_with_negative_amount(self) -> bool:
+    def balance_with_negative_value(self) -> bool:
         return True
