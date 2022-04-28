@@ -24,3 +24,7 @@ class AccountUUID(BaseUUID):
 class PersonUUID(BaseUUID):
     def __init__(self) -> None:
         super().__init__()
+
+class UserUUID(BaseUUID):
+    def __init__(self) -> None:
+        super().__init__()
