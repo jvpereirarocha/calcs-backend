@@ -3,10 +3,11 @@ from datetime import datetime
 from typing import Optional, List
 
 from calculations.adapters.types.basic_types import UserUUID
+from calculations.domain.entities.models import BaseModel
 
 
 @dataclass
-class User:
+class User(BaseModel):
     id: UserUUID
     email: str
     password: str
