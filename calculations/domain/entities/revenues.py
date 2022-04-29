@@ -15,4 +15,3 @@ class Revenue(BaseModel):
     date_of_receivment: Optional[datetime] = None
     account_id: Optional[AccountUUID] = None
     category: Optional[str] = None
-    person_id: Optional[PersonUUID] = None

@@ -8,5 +8,5 @@ from calculations.domain.entities.models import BaseModel
 class Account(BaseModel):
     id: AccountUUID
     number_of_account: str
-    amount_on_account: float
+    value: float
     person_id: PersonUUID

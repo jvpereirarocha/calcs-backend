@@ -15,4 +15,3 @@ class Expense(BaseModel):
     already_paid: Optional[bool] = None
     account_id: Optional[AccountUUID] = None
     category: Optional[str] = None
-    person_id: Optional[PersonUUID] = None
