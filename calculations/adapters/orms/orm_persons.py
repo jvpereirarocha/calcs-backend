@@ -15,7 +15,8 @@ persons = CustomTable(
     'person',
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", PersonUUID),
-    CustomColumn('name', String(255)),
+    CustomColumn('first_name', String(255)),
+    CustomColumn('last_name', String(255)),
     CustomColumn('date_of_birth', DateTime),
     CustomColumn('user_id', ForeignKey(users.c.id, ondelete="CASCADE")),
 )

@@ -10,7 +10,7 @@ from calculations.adapters.types.basic_types import PersonUUID, UserUUID
 
 metadata_obj = MetaData()
 
-persons = CustomTable(
+users = CustomTable(
     'user',
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", UserUUID),

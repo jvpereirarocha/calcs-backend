@@ -18,9 +18,6 @@ class CustomUUID(types.UserDefinedType):
 
     def __init__(self, class_type: Optional[Type[uuid.UUID]]) -> None:
         if class_type:
-            assert issubclass(class_type, uuid.UUID), ValueError(
-                "Should be an UUID subclass"
-            )
             self.class_type = class_type
         else:
             self.class_type = uuid.UUID
@@ -62,15 +59,6 @@ class CustomColumn(Column):
             nullable=False
         )
 
-    def UUIDField(field_name: str, class_type=None, nullable=False, **kwargs):
-        return Column(
-            field_name,
-            CustomUUID(class_type=class_type),
-            default=uuid.uuid4,
-            **kwargs,
-            nullable=False
-        )
-
 class CustomTable(Table):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -79,6 +67,6 @@ class CustomTable(Table):
         super()._init(
             *args,
             CustomColumn('created_when', DateTime, default=datetime.utcnow, nullable=False),
-            CustomColumn('last_modified', DateTime, server_default=func.now(), server_onupdate=func.now(), onupdate=datetime.utcnow, nullable=False),
+            CustomColumn('modified_when', DateTime, server_default=func.now(), server_onupdate=func.now(), onupdate=datetime.utcnow, nullable=False),
             **kwargs
         )
