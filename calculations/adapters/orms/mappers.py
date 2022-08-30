@@ -15,20 +15,27 @@ mapper_registry = registry()
 
 
 def start_mappers():
+    print("Init the mappers")
+    account_mapper = mapper_registry.map_imperatively(
+        Account,
+        accounts,
+        properties={
+            "number_of_account": accounts.c.number_of_account,
+            "value": accounts.c.value,
+            "created_when": accounts.c.created_when,
+            "modified_when": accounts.c.modified_when,
+        },
+    )
+
     user_mapper = mapper_registry.map_imperatively(
         User,
         users,
         properties={
-            "email": persons.c.name,
-            "password": persons.c.password,
-            "avatar": persons.c.avatar,
-            "person": relationship(
-                person_mapper,
-                back_populates="user",
-                uselist=False
-            ),
+            "email": users.c.email,
+            "password": users.c.password,
+            "avatar": users.c.avatar,
             "created_when": users.c.created_when,
-            "modified_when": users.c.modified_when,
+            "modified_when": users.c.modified_when
         },
     )
     person_mapper = mapper_registry.map_imperatively(
@@ -51,24 +58,6 @@ def start_mappers():
         },
     )
     
-    account_mapper = mapper_registry.map_imperatively(
-        Account,
-        accounts,
-        properties={
-            "number_of_account": accounts.c.number_of_account,
-            "value": accounts.c.value,
-            "expenses": relationship(
-                expense_mapper,
-                back_populates="account"
-            ),
-            "revenues": relationship(
-                revenue_mapper,
-                back_populates="account"
-            ),
-            "created_when": accounts.c.created_when,
-            "modified_when": accounts.c.modified_when,
-        },
-    )
 
     expense_mapper = mapper_registry.map_imperatively(
         Expense,
@@ -94,7 +83,7 @@ def start_mappers():
         properties={
             "description": revenues.c.description,
             "value": revenues.c.value,
-            "date_receivment": revenues.c.date_receivment,
+            "date_receivment": revenues.c.date_of_receivment,
             "category": revenues.c.category,
             "account": relationship(
                 account_mapper,
