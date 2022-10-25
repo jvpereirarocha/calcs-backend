@@ -38,7 +38,8 @@ def start_mappers():
             "modified_when": users.c.modified_when
         },
     )
-    person_mapper = mapper_registry.map_imperatively(
+    
+    mapper_registry.map_imperatively(
         Person,
         persons,
         properties={
@@ -47,7 +48,7 @@ def start_mappers():
             "date_of_birth": persons.c.date_of_birth,
             "user": relationship(
                 user_mapper,
-                back_populates="person"
+                back_populates="persons"
             ),
             "account": relationship(
                 account_mapper,
@@ -59,7 +60,7 @@ def start_mappers():
     )
     
 
-    expense_mapper = mapper_registry.map_imperatively(
+    mapper_registry.map_imperatively(
         Expense,
         expenses,
         properties={
@@ -70,14 +71,14 @@ def start_mappers():
             "category": expenses.c.category,
             "account": relationship(
                 account_mapper,
-                back_populates="expenses"
+                back_populates="accounts"
             ),
             "created_when": expenses.c.created_when,
             "modified_when": expenses.c.modified_when,
         },
     )
 
-    revenue_mapper = mapper_registry.map_imperatively(
+    mapper_registry.map_imperatively(
         Revenue,
         revenues,
         properties={
@@ -87,7 +88,7 @@ def start_mappers():
             "category": revenues.c.category,
             "account": relationship(
                 account_mapper,
-                back_populates="revenues"
+                back_populates="accounts"
             ),
             "created_when": revenues.c.created_when,
             "modified_when": revenues.c.modified_when,
