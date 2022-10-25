@@ -13,7 +13,7 @@ from calculations.adapters.orms.orm_accounts import accounts
 metadata_obj = MetaData()
 
 revenues = CustomTable(
-    'revenue',
+    'revenues',
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", RevenueUUID),
     CustomColumn('description', String(255)),

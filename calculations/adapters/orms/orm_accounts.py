@@ -12,7 +12,7 @@ from calculations.adapters.orms.orm_persons import persons
 metadata_obj = MetaData()
 
 accounts = CustomTable(
-    'account',
+    'accounts',
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", AccountUUID),
     CustomColumn('number_of_account', String(255)),
