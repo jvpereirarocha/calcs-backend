@@ -20,6 +20,5 @@ revenues = CustomTable(
     CustomColumn('value', Float(asdecimal=True)),
     CustomColumn('date_of_receivment', DateTime, default=datetime.utcnow),
     CustomColumn('category', String(100), default='other'),
-    CustomColumn('account_id', ForeignKey(accounts.c.id, ondelete="CASCADE")),
     CustomColumn('person_id', ForeignKey(persons.c.id, ondelete="CASCADE")),
 )

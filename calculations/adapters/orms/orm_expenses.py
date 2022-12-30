@@ -21,6 +21,5 @@ expenses = CustomTable(
     CustomColumn('due_date', DateTime, default=datetime.utcnow),
     CustomColumn('already_paid', Boolean, default=False),
     CustomColumn('category', String(100), default='other'),
-    CustomColumn('account_id', ForeignKey(accounts.c.id, ondelete="CASCADE")),
     CustomColumn('person_id', ForeignKey(persons.c.id, ondelete="CASCADE")),
 )

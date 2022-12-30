@@ -16,6 +16,6 @@ accounts = CustomTable(
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", AccountUUID),
     CustomColumn('number_of_account', String(255)),
-    CustomColumn('value', Float(asdecimal=True)),
+    CustomColumn('amount', Float(asdecimal=True)),
     CustomColumn('person_id', ForeignKey(persons.c.id, ondelete="CASCADE")),
 )
