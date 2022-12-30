@@ -5,7 +5,7 @@ description = "Calculate Expenses and Revenues"
 authors = ["Joao Victor <jvpereirarocha@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 Flask = "^2.1.1"
 psycopg2 = "^2.9.3"
 alembic = "^1.7.7"
