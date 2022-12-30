@@ -11,7 +11,7 @@ from calculations.domain.entities.revenues import Revenue
 
 @dataclass
 class Person(BaseModel):
-    id: PersonUUID
+    person_id: PersonUUID
     first_name: str
     last_name: str
     date_of_birth: datetime

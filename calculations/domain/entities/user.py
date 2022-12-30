@@ -8,7 +8,7 @@ from calculations.domain.entities.models import BaseModel
 
 @dataclass
 class User(BaseModel):
-    id: UserUUID
+    user_id: UserUUID
     email: str
     password: str
     avatar: Optional[str] = None

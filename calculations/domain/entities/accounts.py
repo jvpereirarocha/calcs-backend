@@ -6,7 +6,7 @@ from calculations.domain.entities.models import BaseModel
 
 @dataclass
 class Account(BaseModel):
-    id: AccountUUID
+    account_id: AccountUUID
     number_of_account: str
-    value: float
+    amount: float
     person_id: PersonUUID
