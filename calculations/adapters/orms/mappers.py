@@ -16,24 +16,31 @@ mapper_registry = registry()
 
 def start_mappers():
     print("Init the mappers")
-    account_mapper = mapper_registry.map_imperatively(
+    mapper_registry.map_imperatively(
         Account,
         accounts,
         properties={
+            "account_id": accounts.c.id,
             "number_of_account": accounts.c.number_of_account,
-            "value": accounts.c.value,
+            "amount": accounts.c.amount,
             "created_when": accounts.c.created_when,
             "modified_when": accounts.c.modified_when,
         },
     )
 
-    user_mapper = mapper_registry.map_imperatively(
+    mapper_registry.map_imperatively(
         User,
         users,
         properties={
+            "user_id": users.c.id,
             "email": users.c.email,
             "password": users.c.password,
             "avatar": users.c.avatar,
+            "persons": relationship(
+                Person,
+                backref="user",
+                order_by=persons.c.id
+            ),
             "created_when": users.c.created_when,
             "modified_when": users.c.modified_when
         },
@@ -43,16 +50,24 @@ def start_mappers():
         Person,
         persons,
         properties={
+            "person_id": persons.c.id,
             "first_name": persons.c.first_name,
             "last_name": persons.c.last_name,
             "date_of_birth": persons.c.date_of_birth,
-            "user": relationship(
-                user_mapper,
-                back_populates="persons"
+            "accounts": relationship(
+                Account,
+                backref="person",
+                order_by=accounts.c.id
             ),
-            "account": relationship(
-                account_mapper,
-                back_populates="accounts"
+            "expenses": relationship(
+                Expense,
+                backref="person",
+                order_by=expenses.c.id
+            ),
+            "revenues": relationship(
+                Revenue,
+                backref="person",
+                order_by=revenues.c.id
             ),
             "created_when": persons.c.created_when,
             "modified_when": persons.c.modified_when,
@@ -64,15 +79,12 @@ def start_mappers():
         Expense,
         expenses,
         properties={
+            "expense_id": expenses.c.id,
             "description": expenses.c.description,
             "value": expenses.c.value,
             "due_date": expenses.c.due_date,
             "already_paid": expenses.c.already_paid,
             "category": expenses.c.category,
-            "account": relationship(
-                account_mapper,
-                back_populates="accounts"
-            ),
             "created_when": expenses.c.created_when,
             "modified_when": expenses.c.modified_when,
         },
@@ -82,14 +94,11 @@ def start_mappers():
         Revenue,
         revenues,
         properties={
+            "revenue_id": revenues.c.id,
             "description": revenues.c.description,
             "value": revenues.c.value,
             "date_receivment": revenues.c.date_of_receivment,
             "category": revenues.c.category,
-            "account": relationship(
-                account_mapper,
-                back_populates="accounts"
-            ),
             "created_when": revenues.c.created_when,
             "modified_when": revenues.c.modified_when,
         },
