@@ -5,6 +5,9 @@ class BaseUUID:
     def __init__(self) -> None:
         self.id = uuid4().hex
 
+    def __str__(self):
+        return f"{self.__class__.__name}({self.id})"
+
 class ExpenseUUID(BaseUUID):
     def __init__(self) -> None:
         super().__init__()
@@ -28,3 +31,6 @@ class PersonUUID(BaseUUID):
 class UserUUID(BaseUUID):
     def __init__(self) -> None:
         super().__init__()
+
+    def __str__(self):
+        return super().__str__()
