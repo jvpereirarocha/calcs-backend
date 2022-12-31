@@ -1,36 +1,33 @@
+from typing import Union
 from uuid import UUID, uuid4
 
 
-class BaseUUID:
-    def __init__(self) -> None:
-        self.id = uuid4().hex
+class BaseUUID(UUID):
+    def __init__(self, value: Union[UUID, str, "BaseUUID"] = "") -> None:
+        if value == "":
+            _id = str(uuid4())
+        elif isinstance(value, (UUID, str)) or issubclass(self.__class__, BaseUUID):
+            _id = str(value)
+        else:
+            raise ValueError('Invalid value type to use as UUID')
 
-    def __str__(self):
-        return f"{self.__class__.__name}({self.id})"
+        super().__init__(_id)
+
 
 class ExpenseUUID(BaseUUID):
-    def __init__(self) -> None:
-        super().__init__()
+    pass
 
 class RevenueUUID(BaseUUID):
-    def __init__(self) -> None:
-        super().__init__()
+    pass
 
 class BalanceUUID(BaseUUID):
-    def __init__(self) -> None:
-        super().__init__()
+    pass
 
 class AccountUUID(BaseUUID):
-    def __init__(self) -> None:
-        super().__init__()
+    pass
 
 class PersonUUID(BaseUUID):
-    def __init__(self) -> None:
-        super().__init__()
+    pass
 
 class UserUUID(BaseUUID):
-    def __init__(self) -> None:
-        super().__init__()
-
-    def __str__(self):
-        return super().__str__()
+    pass
