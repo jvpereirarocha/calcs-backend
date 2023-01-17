@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-from calculations.adapters.types.basic_types import PersonUUID, RevenueUUID
+from calculations.adapters.types.basic_types import PersonUUID, RevenueUUID, BalanceUUID
 
 from calculations.domain.entities.models import BaseModel
 
@@ -14,3 +14,4 @@ class Revenue(BaseModel):
     date_of_receivment: Optional[datetime] = None
     person_id: Optional[PersonUUID] = None
     category: Optional[str] = None
+    balance_id: Optional[BalanceUUID] = None

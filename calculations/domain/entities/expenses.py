@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-from calculations.adapters.types.basic_types import ExpenseUUID, PersonUUID
+from calculations.adapters.types.basic_types import ExpenseUUID, PersonUUID, BalanceUUID
 
 from calculations.domain.entities.models import BaseModel
 
@@ -15,3 +15,4 @@ class Expense(BaseModel):
     already_paid: Optional[bool] = None
     person_id: Optional[PersonUUID] = None
     category: Optional[str] = None
+    balance_id: Optional[BalanceUUID] = None
