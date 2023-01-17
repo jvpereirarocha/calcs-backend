@@ -1,10 +1,12 @@
 from sqlalchemy.orm import registry
 from sqlalchemy.orm import relationship
 from calculations.adapters.orms.orm_accounts import accounts
+from calculations.adapters.orms.orm_balance import balances
 from calculations.adapters.orms.orm_expenses import expenses
 from calculations.adapters.orms.orm_persons import persons
 from calculations.adapters.orms.orm_revenues import revenues
 from calculations.adapters.orms.orm_users import users
+from calculations.domain.aggregates.balance import Balance
 from calculations.domain.entities.accounts import Account
 from calculations.domain.entities.expenses import Expense
 from calculations.domain.entities.person import Person
@@ -102,4 +104,32 @@ def start_mappers():
             "created_when": revenues.c.created_when,
             "modified_when": revenues.c.modified_when,
         },
+    )
+
+    mapper_registry.map_imperatively(
+        Balance,
+        balances,
+        properties={
+            "balance_id": balances.c.id,
+            "description": balances.c.description,
+            "month": balances.c.month,
+            "year": balances.c.year,
+            "start_date": balances.c.start_date,
+            "end_date": balances.c.end_date,
+            "total_of_balance": balances.c.total_of_balance,
+            "status": balances.c.status,
+            "expenses": relationship(
+                Expense,
+                backref="balance",
+                order_by=expenses.c.id
+
+            ),
+            "revenues": relationship(
+                Revenue,
+                backref="balance",
+                order_by=revenues.c.id
+            ),
+            "created_when": balances.c.created_when,
+            "modified_when": balances.c.modified_when,
+        }
     )
