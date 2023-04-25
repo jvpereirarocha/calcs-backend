@@ -1,24 +1,14 @@
-from os import environ
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-from dotenv import load_dotenv
-
-load_dotenv()
+from calculations.domain.abstractions.repository.abstract_base_repo import AbstractBaseRepo
+from infrastructure.database.sql_session import DEFAULT_SQL_SESSION
 
 
-class BaseRepo:
-    def __init__(self):
-        self._url = environ.get('DATABASE_URI')
-        self._engine = create_engine(self._url)
+class BaseRepo(AbstractBaseRepo):
+    def __init__(self, session=DEFAULT_SQL_SESSION):
         self.session = None
-        self._session = sessionmaker(
-            bind=self._engine,
-            autocommit=False,
-            expire_on_commit=True
-        )
+        self._session_factory = session
 
     def __enter__(self):
-        self.session = self._session()
+        self.session = self._session_factory()
         return self
 
     def __exit__(self, type_, value, traceback):
