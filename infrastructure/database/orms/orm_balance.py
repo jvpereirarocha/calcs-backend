@@ -2,8 +2,8 @@ from sqlalchemy import String, Float, Integer, DateTime, Date
 from sqlalchemy import MetaData
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.sql import func
-from calculations.adapters.orms.orm_base import CustomColumn, CustomTable
-from calculations.adapters.types.basic_types import BalanceUUID
+from infrastructure.database.orms.orm_base import CustomColumn, CustomTable
+from libs.types.identifiers import BalanceUUID
 from calculations.domain.aggregates.balance import StatusBalance
 
 

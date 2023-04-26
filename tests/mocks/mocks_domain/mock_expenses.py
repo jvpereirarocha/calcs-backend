@@ -2,7 +2,7 @@ from datetime import datetime
 import pytest
 import random
 from typing import Optional
-from calculations.adapters.types.basic_types import ExpenseUUID
+from libs.types.identifiers import ExpenseUUID
 from calculations.domain.entities.expenses import Expense
 from calculations.domain.value_object.expense_category import ExpenseCategory
 

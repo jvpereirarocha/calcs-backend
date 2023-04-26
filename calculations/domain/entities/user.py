@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional, List
 
-from calculations.adapters.types.basic_types import UserUUID
+from libs.types.identifiers import UserUUID
 from calculations.domain.entities.models import BaseModel
 
 

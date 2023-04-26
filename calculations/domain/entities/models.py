@@ -1,8 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
-from calculations.adapters.types.basic_types import ExpenseUUID
-
-from dataclasses import dataclass
 from datetime import datetime
 
 

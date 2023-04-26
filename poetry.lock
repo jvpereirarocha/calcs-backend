@@ -18,6 +18,18 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "bcrypt"
+version = "4.0.1"
+description = "Modern password hashing for your software and your servers"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+tests = ["pytest (>=3.2.1,!=3.3.0)"]
+typecheck = ["mypy"]
+
+[[package]]
 name = "billiard"
 version = "3.6.4.0"
 description = "Python multiprocessing fork with improvements and bugfixes"
@@ -542,11 +554,12 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "221b64c81de2b40bb4af3aabb3cf14b567d9c721421440160346433cc2d2d488"
+content-hash = "c38913c9f01a52f980d35da384d4c50038efa9852494e4bc87f482257bf41cb6"
 
 [metadata.files]
 amqp = []
 async-timeout = []
+bcrypt = []
 billiard = []
 black = []
 blinker = []

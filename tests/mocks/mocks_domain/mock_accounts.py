@@ -1,7 +1,7 @@
 import pytest
 import random
 from typing import Optional
-from calculations.adapters.types.basic_types import AccountUUID
+from libs.types.identifiers import AccountUUID
 from calculations.domain.entities.accounts import Account
 
 @pytest.fixture(scope="function")

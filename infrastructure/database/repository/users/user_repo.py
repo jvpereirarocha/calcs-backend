@@ -1,11 +1,11 @@
 from typing import Optional
-from calculations.adapters.types.basic_types import UserUUID
+from libs.types.identifiers import UserUUID
 from calculations.domain.abstractions.repository.user.abstract_repo_user import AbstractUserRepo
 from calculations.domain.entities.user import User
-from calculations.repository.base import BaseRepo
+from infrastructure.database.repository.base import SqlBaseRepo
 
 
-class UserRepo(BaseRepo, AbstractUserRepo):
+class UserRepo(SqlBaseRepo, AbstractUserRepo):
     def get_first_user(self) -> Optional[User]:
         with self:
             return self.session.query(User).first()

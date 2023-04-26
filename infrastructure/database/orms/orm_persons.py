@@ -4,9 +4,9 @@ from sqlalchemy import DateTime
 from sqlalchemy import String, Float
 from sqlalchemy import ForeignKey
 from sqlalchemy import MetaData
-from calculations.adapters.orms.orm_base import CustomColumn, CustomTable
-from calculations.adapters.types.basic_types import PersonUUID
-from calculations.adapters.orms.orm_users import users
+from infrastructure.database.orms.orm_base import CustomColumn, CustomTable
+from libs.types.identifiers import PersonUUID
+from infrastructure.database.orms.orm_users import users
 
 
 metadata_obj = MetaData()

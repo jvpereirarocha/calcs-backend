@@ -2,7 +2,7 @@ import pytest
 import random
 from typing import Optional
 from datetime import datetime
-from calculations.adapters.types.basic_types import PersonUUID
+from libs.types.identifiers import PersonUUID
 from calculations.domain.entities.person import Person
 
 @pytest.fixture(scope="function")

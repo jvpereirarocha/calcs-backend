@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from calculations.adapters.types.basic_types import AccountUUID, PersonUUID
+from libs.types.identifiers import AccountUUID, PersonUUID
 from calculations.domain.entities.models import BaseModel
 
 

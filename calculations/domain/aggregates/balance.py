@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import date, datetime
 from typing import List, Optional
-from calculations.adapters.types.basic_types import BalanceUUID
-from calculations.adapters.types.date_hour import DateRange
+from libs.types.identifiers import BalanceUUID
+from libs.types.date_hour import DateRange
 from calculations.domain.entities.expenses import Expense
 from calculations.domain.entities.revenues import Revenue
 

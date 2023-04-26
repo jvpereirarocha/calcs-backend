@@ -1,8 +1,7 @@
-from calculations.domain.abstractions.repository.abstract_base_repo import AbstractBaseRepo
 from infrastructure.database.sql_session import DEFAULT_SQL_SESSION
 
 
-class BaseRepo(AbstractBaseRepo):
+class SqlBaseRepo:
     def __init__(self, session=DEFAULT_SQL_SESSION):
         self.session = None
         self._session_factory = session

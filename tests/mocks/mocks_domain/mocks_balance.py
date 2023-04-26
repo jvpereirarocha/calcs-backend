@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 import pytest
 import random
 from typing import List, Optional
-from calculations.adapters.types.basic_types import BalanceUUID
-from calculations.adapters.types.date_hour import DateRange
+from libs.types.identifiers import BalanceUUID
+from libs.types.date_hour import DateRange
 from calculations.domain.aggregates.balance import Balance
 from calculations.domain.entities.accounts import Account
 from calculations.domain.entities.expenses import Expense

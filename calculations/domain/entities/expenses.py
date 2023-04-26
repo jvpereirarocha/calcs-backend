@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-from calculations.adapters.types.basic_types import ExpenseUUID, PersonUUID, BalanceUUID
+from libs.types.identifiers import ExpenseUUID, PersonUUID, BalanceUUID
 
 from calculations.domain.entities.models import BaseModel
 

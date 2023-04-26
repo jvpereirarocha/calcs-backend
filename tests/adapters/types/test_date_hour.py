@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
 import pytest
-from calculations.adapters.types.date_hour import DateRange
-from calculations.adapters.exceptions.date_hour import InvalidDateRange
+from libs.types.date_hour import DateRange
+from libs.types.date_hour import InvalidDateRange
 
 
 def test_date_range_when_is_valid():

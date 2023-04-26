@@ -2,7 +2,7 @@ from datetime import datetime
 import pytest
 import random
 from typing import Optional
-from calculations.adapters.types.basic_types import RevenueUUID
+from libs.types.identifiers import RevenueUUID
 from calculations.domain.entities.revenues import Revenue
 from calculations.domain.value_object.revenue_category import RevenueCategory
 

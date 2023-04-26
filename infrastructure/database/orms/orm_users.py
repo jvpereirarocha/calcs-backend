@@ -1,11 +1,8 @@
-from datetime import datetime
-from sqlalchemy import Boolean
 from sqlalchemy import DateTime
-from sqlalchemy import String, Float
-from sqlalchemy import ForeignKey
+from sqlalchemy import String
 from sqlalchemy import MetaData
-from calculations.adapters.orms.orm_base import CustomColumn, CustomTable
-from calculations.adapters.types.basic_types import PersonUUID, UserUUID
+from infrastructure.database.orms.orm_base import CustomColumn, CustomTable
+from libs.types.identifiers import UserUUID
 
 
 metadata_obj = MetaData()

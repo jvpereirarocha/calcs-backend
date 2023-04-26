@@ -2,7 +2,7 @@ import pytest
 import random
 from typing import Optional
 from datetime import datetime
-from calculations.adapters.types.basic_types import UserUUID
+from libs.types.identifiers import UserUUID
 from calculations.domain.entities.user import User
 import bcrypt
 

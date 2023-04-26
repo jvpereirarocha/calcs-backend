@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional, List
 
-from calculations.adapters.types.basic_types import UserUUID, PersonUUID
+from libs.types.identifiers import UserUUID, PersonUUID
 from calculations.domain.entities.accounts import Account
 from calculations.domain.entities.expenses import Expense
 from calculations.domain.entities.models import BaseModel
