@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 from typing import List
 
-from calculations.adapters.exceptions.date_hour import InvalidDateRange
+from calculations.domain.exceptions.date_hour import InvalidDateRange
 
 
 class DateRange:
