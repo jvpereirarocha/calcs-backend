@@ -1,11 +1,11 @@
 from sqlalchemy.orm import registry
 from sqlalchemy.orm import relationship
-from calculations.adapters.orms.orm_accounts import accounts
-from calculations.adapters.orms.orm_balance import balances
-from calculations.adapters.orms.orm_expenses import expenses
-from calculations.adapters.orms.orm_persons import persons
-from calculations.adapters.orms.orm_revenues import revenues
-from calculations.adapters.orms.orm_users import users
+from infrastructure.database.orms.orm_accounts import accounts
+from infrastructure.database.orms.orm_balance import balances
+from infrastructure.database.orms.orm_expenses import expenses
+from infrastructure.database.orms.orm_persons import persons
+from infrastructure.database.orms.orm_revenues import revenues
+from infrastructure.database.orms.orm_users import users
 from calculations.domain.aggregates.balance import Balance
 from calculations.domain.entities.accounts import Account
 from calculations.domain.entities.expenses import Expense
@@ -25,9 +25,13 @@ def start_mappers():
             "account_id": accounts.c.id,
             "number_of_account": accounts.c.number_of_account,
             "amount": accounts.c.amount,
-            "created_when": accounts.c.created_when,
-            "modified_when": accounts.c.modified_when,
+            # "created_when": accounts.c.created_when,
+            # "modified_when": accounts.c.modified_when,
         },
+        exclude_properties={
+            "created_when",
+            "modified_when"
+        }
     )
 
     mapper_registry.map_imperatively(
@@ -43,9 +47,13 @@ def start_mappers():
                 backref="user",
                 order_by=persons.c.id
             ),
-            "created_when": users.c.created_when,
-            "modified_when": users.c.modified_when
+            # "created_when": users.c.created_when,
+            # "modified_when": users.c.modified_when
         },
+        exclude_properties={
+            "created_when",
+            "modified_when"
+        }
     )
     
     mapper_registry.map_imperatively(
@@ -71,9 +79,13 @@ def start_mappers():
                 backref="person",
                 order_by=revenues.c.id
             ),
-            "created_when": persons.c.created_when,
-            "modified_when": persons.c.modified_when,
+            # "created_when": persons.c.created_when,
+            # "modified_when": persons.c.modified_when,
         },
+        exclude_properties={
+            "created_when",
+            "modified_when"
+        }
     )
     
 
@@ -87,9 +99,13 @@ def start_mappers():
             "due_date": expenses.c.due_date,
             "already_paid": expenses.c.already_paid,
             "category": expenses.c.category,
-            "created_when": expenses.c.created_when,
-            "modified_when": expenses.c.modified_when,
+            # "created_when": expenses.c.created_when,
+            # "modified_when": expenses.c.modified_when,
         },
+        exclude_properties={
+            "created_when",
+            "modified_when"
+        }
     )
 
     mapper_registry.map_imperatively(
@@ -101,9 +117,13 @@ def start_mappers():
             "value": revenues.c.value,
             "date_receivment": revenues.c.date_of_receivment,
             "category": revenues.c.category,
-            "created_when": revenues.c.created_when,
-            "modified_when": revenues.c.modified_when,
+            # "created_when": revenues.c.created_when,
+            # "modified_when": revenues.c.modified_when,
         },
+        exclude_properties={
+            "created_when",
+            "modified_when"
+        }
     )
 
     mapper_registry.map_imperatively(
@@ -122,14 +142,17 @@ def start_mappers():
                 Expense,
                 backref="balance",
                 order_by=expenses.c.id
-
             ),
             "revenues": relationship(
                 Revenue,
                 backref="balance",
                 order_by=revenues.c.id
             ),
-            "created_when": balances.c.created_when,
-            "modified_when": balances.c.modified_when,
+            # "created_when": balances.c.created_when,
+            # "modified_when": balances.c.modified_when,
+        },
+        exclude_properties={
+            "created_when",
+            "modified_when"
         }
     )
