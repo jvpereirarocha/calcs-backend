@@ -6,7 +6,7 @@ from infrastructure.database.repository.users.user_repo import UserRepo
 from libs.types.identifiers import UserUUID
 
 
-user_blueprint = Blueprint(__name__, url_prefix="/users")
+user_blueprint = Blueprint("users", __name__, url_prefix="/users")
 
 
 @user_blueprint.route("/", methods=["GET"])
@@ -16,7 +16,8 @@ def get_all_users():
 @user_blueprint.route("/new", methods=["POST"])
 def create_user():
     
-    data = request.data
+    data = request.get_json()
+
     user_requester = CreateUserInputPort(
         user_id=UserUUID(),
         email=data["email"],
