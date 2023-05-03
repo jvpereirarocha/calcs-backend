@@ -16,6 +16,7 @@ class CreateUserService(AbstractService):
             password=self.requester.password,
             avatar=self.requester.avatar
         )
+        print(f"####### user: {user} ########")
         self.repo.save_user(user=user)
 
     def operation(self):
