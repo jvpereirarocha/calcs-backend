@@ -1,8 +1,8 @@
-from flask import Blueprint, jsonify, request
-from application.parsers.user import AllUsersParser, CreatedOrUpdatedUserParser
+from flask import Blueprint, request
+from application.parsers.user import AllUsersParser, CreatedOrUpdatedUserParser, GetOneUserParser
 
 from application.ports.user import CreateUserInputPort
-from application.services.user_service import CreateUserService, GetUsersService
+from application.services.user_service import CreateUserService, FetchOneUserService, GetUsersService
 from infrastructure.database.repository.users.user_repo import UserRepo
 from libs.types.identifiers import UserUUID
 
@@ -31,3 +31,11 @@ def create_user():
     service.create_or_update()
     parser = CreatedOrUpdatedUserParser()
     return parser.to_json(), 201
+
+@user_blueprint.route("/get_first_user", methods=["GET"])
+def retrieve_the_first_user():
+    repo = UserRepo()
+    service = FetchOneUserService(repo=repo)
+    first_user = service.get_first_user()
+    parser = GetOneUserParser()
+    return parser.to_json(data=first_user), 200
