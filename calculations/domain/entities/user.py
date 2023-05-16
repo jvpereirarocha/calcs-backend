@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, List
+from typing import Dict, Optional, List
 
 from libs.types.identifiers import UserUUID
 from calculations.domain.entities.models import BaseModel
@@ -21,7 +21,6 @@ class User(BaseModel):
 
     @classmethod
     def create_user(cls, user_id: UserUUID, email: str, password: str, avatar: Optional[str] = None) -> "User":
-        print(f"########## pass: {password} ############")
         return cls(
             user_id=user_id,
             email=email,
@@ -30,3 +29,12 @@ class User(BaseModel):
             created_when=datetime.now(),
             modified_when=datetime.now()
         )
+    
+    def to_dict(self) -> Dict[str, str]:
+        return {
+            "user_id": str(self.user_id),
+            "email": self.email,
+            "avatar": self.avatar,
+            "created_when": self.created_when.strftime("%d/%m/%Y"),
+            "modified_when": self.modified_when.strftime("%d/%m/%Y")
+        }
