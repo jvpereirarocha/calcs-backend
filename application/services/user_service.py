@@ -13,8 +13,9 @@ from libs.types.identifiers import BaseUUID
 
 class CreateUserService(AbstractCreateOrUpdateService):
     def __init__(self, requester: CreateUserInputPort, repo: AbstractUserRepo):
-        super().__init__(requester, repo)
-
+        self.requester = requester
+        self.repo = repo
+    
     def _create_new_user(self):
         user = User.create_user(
             user_id=self.requester.user_id,
