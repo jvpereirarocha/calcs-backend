@@ -7,6 +7,7 @@ from sqlalchemy import MetaData
 from infrastructure.database.orms.orm_base import CustomColumn, CustomTable
 from libs.types.identifiers import RevenueUUID
 from infrastructure.database.orms.orm_persons import persons
+from infrastructure.database.orms.orm_balance import balances
 
 
 metadata_obj = MetaData()
@@ -20,4 +21,5 @@ revenues = CustomTable(
     CustomColumn('date_of_receivment', DateTime, default=datetime.utcnow),
     CustomColumn('category', String(100), default='other'),
     CustomColumn('person_id', ForeignKey(persons.c.id, ondelete="CASCADE")),
+    CustomColumn('balance_id', ForeignKey(balances.c.id, ondelete="CASCADE")),
 )

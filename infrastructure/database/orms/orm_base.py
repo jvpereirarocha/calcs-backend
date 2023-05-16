@@ -27,8 +27,7 @@ class CustomUUID(types.UserDefinedType):
     def bind_processor(self, dialect):
         def process(value):
             if value is not None:
-                value = util.text_type(value)
-            return value
+                return value
         
         return process
 
@@ -66,7 +65,7 @@ class CustomTable(Table):
     def _init(cls, *args, **kwargs):
         super()._init(
             *args,
-            CustomColumn('created_when', DateTime, default=datetime.utcnow, nullable=False),
-            CustomColumn('modified_when', DateTime, server_default=func.now(), server_onupdate=func.now(), onupdate=datetime.utcnow, nullable=False),
+            CustomColumn('created_when', DateTime(timezone=True), server_default=func.now()),
+            CustomColumn('modified_when', DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now()),
             **kwargs
         )

@@ -12,6 +12,6 @@ users = CustomTable(
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", UserUUID),
     CustomColumn('email', String(255)),
-    CustomColumn('password', DateTime),
+    CustomColumn('password', String(255)),
     CustomColumn('avatar', String(255), nullable=True),
 )
