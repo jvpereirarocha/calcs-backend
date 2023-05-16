@@ -24,3 +24,8 @@ class AllUsersParser(AbstractParser):
                 json.dumps(user_as_dict)
             )
         return list_of_parsed_users
+    
+
+class GetOneUserParser(AbstractParser):
+    def to_json(self, data: User) -> str:
+        return json.dumps(data.to_dict())
