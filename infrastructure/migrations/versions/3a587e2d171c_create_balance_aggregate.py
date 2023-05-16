@@ -29,7 +29,7 @@ def upgrade():
         sa.Column('total_of_balance', sa.Float(asdecimal=True), nullable=False, default=0.0),
         sa.Column('start_date', sa.Date, nullable=False),
         sa.Column('end_date', sa.Date, nullable=False),
-        sa.Column('status_balance', ENUM, nullable=False, default='initial'),
+        sa.Column('status_balance', ENUM(name="balance_status"), nullable=False, default='initial'),
         sa.Column('created_when', sa.DateTime, default=func.now()),
         sa.Column('modified_when', sa.DateTime, default=func.now()),
     )
