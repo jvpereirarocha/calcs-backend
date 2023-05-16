@@ -19,16 +19,16 @@ depends_on = None
 
 def upgrade():
     op.add_column('users',
-        Column('created_when', sa.DateTime, default=func.now()),
+        Column('created_when', sa.DateTime(timezone=True), server_default=func.now()),
     )
     op.add_column('users',
-        Column('modified_when', sa.DateTime, default=func.now()),
+        Column('modified_when', sa.DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now()),
     )
     op.add_column('persons',
-        Column('created_when', sa.DateTime, default=func.now()),
+        Column('created_when', sa.DateTime(timezone=True), server_default=func.now()),
     )
     op.add_column('persons',
-        Column('modified_when', sa.DateTime, default=func.now()),
+        Column('modified_when', sa.DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now()),
     )
 
 

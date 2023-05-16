@@ -29,8 +29,8 @@ def upgrade():
         sa.Column('already_paid', sa.Boolean, nullable=False, default=False),
         sa.Column('person_id', UUID, sa.ForeignKey('persons.id')),
         sa.Column('category', sa.String(100), default="other"),
-        sa.Column('created_when', sa.DateTime, nullable=False, default=func.now()),
-        sa.Column('modified_when', sa.DateTime, nullable=False, default=func.now()),
+        sa.Column('created_when', sa.DateTime(timezone=True), nullable=False, server_default=func.now()),
+        sa.Column('modified_when', sa.DateTime(timezone=True), nullable=False, server_default=func.now(), server_onupdate=func.now()),
     )
 
 

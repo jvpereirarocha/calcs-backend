@@ -26,8 +26,8 @@ def upgrade():
         sa.Column('number_of_account', sa.String(50), nullable=False),
         sa.Column('amount', sa.String(255), nullable=False),
         sa.Column('person_id', UUID, sa.ForeignKey('persons.id')),
-        sa.Column('created_when', sa.DateTime, default=func.now()),
-        sa.Column('modified_when', sa.DateTime, default=func.now()),
+        sa.Column('created_when', sa.DateTime(timezone=True), server_default=func.now()),
+        sa.Column('modified_when', sa.DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now()),
     )
 
 
