@@ -43,3 +43,6 @@ class FetchOneUserService(AbstractFetchOneService):
         return self.repo.get_first_user_by_id(
             user_id=entity_id
         )
+    
+    def get_first_user(self) -> User:
+        return self.repo.get_first_user()
