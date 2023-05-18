@@ -12,4 +12,4 @@ PS: the project is not ready yet
 - Flask 2.2
 
 ## Architecture
-I'm using concepts about SOLID, Clean Code and Clean Architecture in this project. I'm very concerned about Software Design Principles to maintain the project structure as simple as possible.
+I'm applying concepts like SOLID, Clean Code and Clean Architecture in this project. I'm very concerned about Software Design Principles to maintain the project structure as simple as possible.
