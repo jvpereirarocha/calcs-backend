@@ -1,5 +1,5 @@
 from typing import Iterable
-from application.ports.user import CreateUserInputPort
+from application.ports.user import CreateUser
 from calculations.domain.abstractions.repository.base.abstract_repo import AbstractRepo
 from calculations.domain.abstractions.repository.user.abstract_repo_user import AbstractUserRepo
 from calculations.domain.abstractions.services.abstract_service import (
@@ -12,7 +12,7 @@ from libs.types.identifiers import BaseUUID
 
 
 class CreateUserService(AbstractCreateOrUpdateService):
-    def __init__(self, requester: CreateUserInputPort, repo: AbstractUserRepo):
+    def __init__(self, requester: CreateUser, repo: AbstractUserRepo):
         self.requester = requester
         self.repo = repo
     

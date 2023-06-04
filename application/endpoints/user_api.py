@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from application.parsers.user import AllUsersParser, CreatedOrUpdatedUserParser, GetOneUserParser
 
-from application.ports.user import CreateUserInputPort
+from application.ports.user import CreateUser
 from application.services.user_service import CreateUserService, FetchOneUserService, GetUsersService
 from infrastructure.database.repository.users.user_repo import UserRepo
 from libs.types.identifiers import UserUUID
@@ -18,9 +18,9 @@ def get_all_users():
     return parser.to_json(data=users), 200
 
 @user_blueprint.route("/new", methods=["POST"])
-def create_user():
+def create_user_and_person():
     data = request.get_json()
-    user_requester = CreateUserInputPort(
+    user_requester = CreateUser(
         user_id=UserUUID(),
         email=data["email"],
         password=data["password"],

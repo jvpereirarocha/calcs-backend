@@ -5,7 +5,7 @@ from libs.types.identifiers import UserUUID
 
 
 @dataclass
-class CreateUserInputPort(AbstractInputPort):
+class CreateUser(AbstractInputPort):
     user_id: UserUUID
     email: str
     password: str
