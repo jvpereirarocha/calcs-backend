@@ -30,6 +30,21 @@ class User(BaseModel):
             modified_when=datetime.now()
         )
     
+    def update_user(
+        self,
+        email: Optional[str] = None,
+        password: Optional[str] = None,
+        avatar: Optional[str] = None,
+    ) -> None:
+        if email:
+            self.email = email
+        if password:
+            self.password = self._encrypt_password(password=password)
+        if avatar:
+            self.avatar = avatar
+
+        self.modified_when = datetime.now()
+    
     def to_dict(self) -> Dict[str, str]:
         return {
             "user_id": str(self.user_id),
