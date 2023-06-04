@@ -1,41 +1,47 @@
 from flask import Blueprint, request
-from application.parsers.user import AllUsersParser, CreatedOrUpdatedUserParser, GetOneUserParser
+from application.input_ports.person import CreatePerson
 
-from application.ports.user import CreateUser
+from application.input_ports.user import CreateUser
+from application.output_ports.user_and_person_created import UserAndPersonCreated
+from application.services.person_service import CreatePersonService
 from application.services.user_service import CreateUserService, FetchOneUserService, GetUsersService
+from infrastructure.database.repository.persons.person_repo import PersonRepo
 from infrastructure.database.repository.users.user_repo import UserRepo
-from libs.types.identifiers import UserUUID
+from libs.types.identifiers import PersonUUID, UserUUID
 
 
 user_blueprint = Blueprint("users", __name__, url_prefix="/users")
 
-
-@user_blueprint.route("/", methods=["GET"])
-def get_all_users():
-    service = GetUsersService(repo=UserRepo())
-    users = service.get_all()
-    parser = AllUsersParser()
-    return parser.to_json(data=users), 200
-
-@user_blueprint.route("/new", methods=["POST"])
+@user_blueprint.route("/new", methods=["POST", "OPTIONS"])
 def create_user_and_person():
     data = request.get_json()
+    # First of all, creating a user
     user_requester = CreateUser(
         user_id=UserUUID(),
         email=data["email"],
         password=data["password"],
         avatar=data.get("avatar", None)
     )
-    repo = UserRepo()
-    service = CreateUserService(requester=user_requester, repo=repo)
-    service.create_or_update()
-    parser = CreatedOrUpdatedUserParser()
-    return parser.to_json(), 201
+    user_requester.validate_request()
+    user_repo = UserRepo()
+    user_service = CreateUserService(requester=user_requester, repo=user_repo)
+    user = user_service.create_or_update()
+    user_repo.commit()
+    # After that, creating a person instance
+    person_requester = CreatePerson(
+        person_id=PersonUUID(),
+        first_name=data["first_name"],
+        last_name=data["last_name"],
+        date_of_birth=data["date_of_birth"]
+    )
+    person_requester.validate_request()
+    person_repo = PersonRepo()
+    person_service = CreatePersonService(requester=person_requester, repo=person_repo)
+    person = person_service.create_or_update()
+    person_repo.commit()
 
-@user_blueprint.route("/get_first_user", methods=["GET"])
-def retrieve_the_first_user():
-    repo = UserRepo()
-    service = FetchOneUserService(repo=repo)
-    first_user = service.get_first_user()
-    parser = GetOneUserParser()
-    return parser.to_json(data=first_user), 200
+    output = UserAndPersonCreated(
+        user=user,
+        person=person
+    )
+    return output.to_json(), output.status_code
