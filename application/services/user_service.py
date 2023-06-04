@@ -1,5 +1,5 @@
 from typing import Iterable
-from application.ports.user import CreateUser
+from application.input_ports.user import CreateUser
 from calculations.domain.abstractions.repository.base.abstract_repo import AbstractRepo
 from calculations.domain.abstractions.repository.user.abstract_repo_user import AbstractUserRepo
 from calculations.domain.abstractions.services.abstract_service import (
@@ -17,6 +17,18 @@ class CreateUserService(AbstractCreateOrUpdateService):
         self.repo = repo
     
     def _create_new_user(self):
+        user_already_exists = self.repo.get_first_user_by_id(
+            user_id=self.requester.user_id
+        )
+        if user_already_exists:
+            user_already_exists.update_user(
+                email=self.requester.email,
+                password=self.requester.password,
+                avatar=self.requester.avatar
+            )
+            self.repo.save_user(user=user_already_exists)
+            return user_already_exists
+        
         user = User.create_user(
             user_id=self.requester.user_id,
             email=self.requester.email,
@@ -24,6 +36,7 @@ class CreateUserService(AbstractCreateOrUpdateService):
             avatar=self.requester.avatar
         )
         self.repo.save_user(user=user)
+        return user
 
     def create_or_update(self):
         return self._create_new_user()
