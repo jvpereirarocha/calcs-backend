@@ -35,6 +35,4 @@ class User(BaseModel):
             "user_id": str(self.user_id),
             "email": self.email,
             "avatar": self.avatar,
-            "created_when": self.created_when.strftime("%d/%m/%Y"),
-            "modified_when": self.modified_when.strftime("%d/%m/%Y")
         }
