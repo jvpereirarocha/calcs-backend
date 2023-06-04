@@ -1,5 +1,8 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class AbstractRepo(ABC):
-    pass
+    
+    @abstractmethod
+    def commit(self) -> None:
+        pass

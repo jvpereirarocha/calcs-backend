@@ -22,3 +22,7 @@ class UserRepo(SqlBaseRepo, AbstractUserRepo):
     def get_all_users(self) -> Iterable[User]:
         with self:
             return self.session.query(User).all()
+        
+    def commit(self) -> None:
+        with self:
+            self.session.commit()
