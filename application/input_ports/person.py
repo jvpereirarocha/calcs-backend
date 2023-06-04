@@ -2,7 +2,7 @@ from datetime import date
 from calculations.domain.abstractions.port.abstract_port import AbstractInputPort
 from dataclasses import dataclass
 
-from libs.types.identifiers import PersonUUID
+from libs.types.identifiers import PersonUUID, UserUUID
 
 
 @dataclass
@@ -11,6 +11,9 @@ class CreatePerson(AbstractInputPort):
     first_name: str
     last_name: str
     date_of_birth: str | date
+    user_id: str
+
+    _valid_request: bool = False
 
     def _validate_first_name(self):
         if not self.first_name:
@@ -30,8 +33,19 @@ class CreatePerson(AbstractInputPort):
         except ValueError:
             raise ValueError("Date of birth must be in the format DD/MM/YYYY.")
         
+    def _convert_str_to_uuid(self):
+        try:
+            self.person_id = UserUUID(self.user_id)
+        except ValueError:
+            raise ValueError("User ID must be a valid UUID.")
+        
     def validate_request(self):
         self._validate_first_name()
         self._validate_last_name()
         self._validate_date_of_birth()
         self._convert_date_of_birth()
+        self._convert_str_to_uuid()
+        self._valid_request = True
+
+    def request_is_valid(self):
+        return self._valid_request

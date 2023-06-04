@@ -12,6 +12,8 @@ class CreateUser(AbstractInputPort):
     password: str
     avatar: Optional[str] = None
 
+    _valid_request: bool = False
+
     def _validate_email(self):
         if not self.email:
             raise ValueError("Email is required.")
@@ -23,3 +25,7 @@ class CreateUser(AbstractInputPort):
     def validate_request(self):
         self._validate_email()
         self._validate_password()
+        self._valid_request = True
+
+    def request_is_valid(self):
+        return self._valid_request
