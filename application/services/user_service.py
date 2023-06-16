@@ -1,6 +1,5 @@
 from typing import Iterable
 from application.input_ports.user import CreateUser
-from calculations.domain.abstractions.repository.base.abstract_repo import AbstractRepo
 from calculations.domain.abstractions.repository.user.abstract_repo_user import AbstractUserRepo
 from calculations.domain.abstractions.services.abstract_service import (
     AbstractCreateOrUpdateService,
