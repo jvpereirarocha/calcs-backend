@@ -18,7 +18,7 @@ def mock_expense_generate(mock_account):
         modified_when: Optional[datetime] = None
     ):
         expense = Expense(
-            id=id or ExpenseUUID(),
+            expense_id=id or ExpenseUUID(),
             description=description or random.choice(["expense 1", "expense 2", "expense 3"]),
             value=value or random.uniform(0.0, 100.0),
             due_date=due_date or datetime.now(),

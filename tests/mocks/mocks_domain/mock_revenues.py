@@ -17,7 +17,7 @@ def mock_revenue_generate(mock_account):
         modified_when: Optional[datetime] = None
     ):
         revenue = Revenue(
-            id=id or RevenueUUID(),
+            revenue_id=id or RevenueUUID(),
             description=description or random.choice(["revenue 1", "revenue 2", "revenue 3"]),
             value=value or random.uniform(1.0, 100.0),
             date_of_receivment=date_of_receivment or datetime.now(),

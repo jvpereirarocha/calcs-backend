@@ -25,7 +25,7 @@ def mock_balance_generate(mock_account, mock_person, mock_expense, mock_revenue)
         revenues: Optional[List[Revenue]] = None,
     ):
         balance = Balance(
-            id=id or BalanceUUID(),
+            balance_id=id or BalanceUUID(),
             value=value or random.uniform(0.0, 1000.0),
             accounts=accounts or [mock_account],
             person=person or mock_person,

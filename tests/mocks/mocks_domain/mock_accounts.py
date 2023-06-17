@@ -13,7 +13,7 @@ def mock_account_generate():
         amount_on_account: Optional[float] = None
     ):
         account = Account(
-            id=id or AccountUUID(),
+            account_id=id or AccountUUID(),
             number_of_account=number_of_account or random.choice([str(i) * 5 for i in range(0, 9)]),
             amount_on_account=amount_on_account or random.uniform(0.0, 100.0),
         )
