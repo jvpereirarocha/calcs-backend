@@ -1,6 +1,6 @@
 from typing import Iterable
 from application.input_ports.user import CreateUser
-from calculations.domain.abstractions.repository.user.abstract_repo_user import AbstractUserRepo
+from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import AbstractProfileRepo
 from calculations.domain.abstractions.services.abstract_service import (
     AbstractCreateOrUpdateService,
     AbstractGetAllService,
@@ -11,7 +11,7 @@ from libs.types.identifiers import BaseUUID
 
 
 class CreateUserService(AbstractCreateOrUpdateService):
-    def __init__(self, requester: CreateUser, repo: AbstractUserRepo):
+    def __init__(self, requester: CreateUser, repo: AbstractProfileRepo):
         self.requester = requester
         self.repo = repo
     
@@ -41,7 +41,7 @@ class CreateUserService(AbstractCreateOrUpdateService):
         return self._create_new_user()
     
 class GetUsersService(AbstractGetAllService):
-    def __init__(self, repo: AbstractUserRepo) -> None:
+    def __init__(self, repo: AbstractProfileRepo) -> None:
         self.repo = repo
 
     def get_all(self) -> Iterable[User]:
@@ -49,7 +49,7 @@ class GetUsersService(AbstractGetAllService):
     
 
 class FetchOneUserService(AbstractFetchOneService):
-    def __init__(self, repo: AbstractUserRepo) -> None:
+    def __init__(self, repo: AbstractProfileRepo) -> None:
         self.repo = repo
     
     def fetch_one(self, entity_id: BaseUUID) -> User:

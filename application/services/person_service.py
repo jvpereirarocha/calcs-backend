@@ -1,5 +1,5 @@
 from application.input_ports.person import CreatePerson
-from calculations.domain.abstractions.repository.person.abstract_repo_person import AbstractPersonRepo
+from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import AbstractProfileRepo
 from calculations.domain.abstractions.services.abstract_service import (
     AbstractCreateOrUpdateService,
 )
@@ -7,12 +7,12 @@ from calculations.domain.entities.person import Person
 
 
 class CreatePersonService(AbstractCreateOrUpdateService):
-    def __init__(self, requester: CreatePerson, repo: AbstractPersonRepo):
+    def __init__(self, requester: CreatePerson, repo: AbstractProfileRepo):
         self.requester = requester
         self.repo = repo
     
     def _create_new_or_update_person(self):
-        person_already_exists = self.repo.get_first_person_by_id(
+        person_already_exists = self.repo.get_person_by_id(
             person_id=self.requester.person_id
         )
         if person_already_exists:
