@@ -20,6 +20,9 @@ class Person(BaseModel):
     revenues: Optional[List[Revenue]] = field(default_factory=list)
     user_id: Optional[UserUUID] = None
 
+    def __hash__(self) -> int:
+        return id(self.person_id)
+
     @classmethod
     def create_person(
         cls,
@@ -35,6 +38,8 @@ class Person(BaseModel):
             last_name=last_name,
             date_of_birth=date_of_birth,
             user_id=user_id,
+            created_when=datetime.now(),
+            modified_when=datetime.now()
         )
     
     def update_person(

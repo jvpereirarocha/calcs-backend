@@ -14,6 +14,9 @@ class User(BaseModel):
     password: str
     avatar: Optional[str] = None
 
+    def __hash__(self) -> int:
+        return id(self.user_id)
+
     @classmethod
     def _encrypt_password(self, password: str) -> str:
         salt = bcrypt.gensalt()
