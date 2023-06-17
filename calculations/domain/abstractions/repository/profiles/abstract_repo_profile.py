@@ -28,6 +28,10 @@ class AbstractProfileRepo(AbstractRepo, ABC):
         raise NotImplementedError()
     
     @abstractmethod
+    def get_first_person(self) -> Optional[Person]:
+        raise NotImplementedError()
+    
+    @abstractmethod
     def get_person_by_id(self, person_id: PersonUUID) -> Optional[Person]:
         raise NotImplementedError()
     
