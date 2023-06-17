@@ -19,7 +19,7 @@ class ProfileRepo(SqlBaseRepo, AbstractProfileRepo):
             query = select(User).where(User.user_id == user_id)
             return self.session.execute(query).scalar_one_or_none()
         
-    def get_first_by_email(self, email: str) -> Optional[User]:
+    def get_first_user_by_email(self, email: str) -> Optional[User]:
         with self:
             query = select(User).where(User.email == email)
             return self.session.execute(query).scalar_one_or_none()
@@ -49,7 +49,7 @@ class ProfileRepo(SqlBaseRepo, AbstractProfileRepo):
         
     def get_person_by_user_email(self, email: str) -> Person | None:
         with self:
-            user = self.get_first_by_email(email=email)
+            user = self.get_first_user_by_email(email=email)
             if user:
                 query = select(Person).where(Person.user_id == user.user_id)
                 return self.session.execute(query).scalar_one_or_none()

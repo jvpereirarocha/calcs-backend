@@ -16,7 +16,7 @@ class AbstractProfileRepo(AbstractRepo, ABC):
         raise NotImplementedError()
     
     @abstractmethod
-    def get_first_by_email(self, email: str) -> Optional[User]:
+    def get_first_user_by_email(self, email: str) -> Optional[User]:
         raise NotImplementedError()
     
     @abstractmethod
