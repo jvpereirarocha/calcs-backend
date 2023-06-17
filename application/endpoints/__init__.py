@@ -1,6 +1,6 @@
 from .blueprint import api_v1_blueprint
-from .user_api import user_blueprint
+from .profile_api import profile_blueprint
 
 
-api_v1_blueprint.register_blueprint(user_blueprint)
+api_v1_blueprint.register_blueprint(profile_blueprint)
 
