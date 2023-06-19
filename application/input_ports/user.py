@@ -17,7 +17,7 @@ class CreateUser(AbstractInputPort):
     def _validate_email(self):
         if not self.email:
             raise ValueError("Email is required.")
-        
+
     def _validate_password(self):
         if not self.password:
             raise ValueError("Password is required.")

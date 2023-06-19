@@ -9,16 +9,16 @@ class AbstractInputPort(ABC):
     @abstractmethod
     def validate_request(self):
         raise NotImplementedError()
-    
+
     @abstractmethod
     def request_is_valid(self):
         raise NotImplementedError()
-    
+
 
 class AbstractOutputPort(ABC):
     def __init__(self) -> None:
         self.status_code = 200
-    
+
     @abstractmethod
     def to_json(self, data):
         raise NotImplementedError()

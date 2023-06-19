@@ -8,10 +8,10 @@ from libs.types.identifiers import UserUUID
 metadata_obj = MetaData()
 
 users = CustomTable(
-    'users',
+    "users",
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", UserUUID),
-    CustomColumn('email', String(255)),
-    CustomColumn('password', String(255)),
-    CustomColumn('avatar', String(255), nullable=True),
+    CustomColumn("email", String(255)),
+    CustomColumn("password", String(255)),
+    CustomColumn("avatar", String(255), nullable=True),
 )

@@ -13,25 +13,36 @@ from sqlalchemy import func
 
 
 # revision identifiers, used by Alembic.
-revision = 'd6ce6aa3e6f9'
-down_revision = '672acc87c093'
+revision = "d6ce6aa3e6f9"
+down_revision = "672acc87c093"
 branch_labels = None
 depends_on = None
 
 
 def upgrade():
     op.create_table(
-        'revenues',
-        sa.Column('id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-        sa.Column('description', sa.String(255), nullable=False),
-        sa.Column('value', sa.Float, nullable=False),
-        sa.Column('date_of_receivment', sa.DateTime, nullable=True),
-        sa.Column('person_id', UUID, sa.ForeignKey('persons.id')),
-        sa.Column('category', sa.String(100), default="other"),
-        sa.Column('created_when', sa.DateTime(timezone=True), nullable=False, server_default=func.now()),
-        sa.Column('modified_when', sa.DateTime(timezone=True), nullable=False, server_default=func.now(), server_onupdate=func.now()),
+        "revenues",
+        sa.Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column("description", sa.String(255), nullable=False),
+        sa.Column("value", sa.Float, nullable=False),
+        sa.Column("date_of_receivment", sa.DateTime, nullable=True),
+        sa.Column("person_id", UUID, sa.ForeignKey("persons.id")),
+        sa.Column("category", sa.String(100), default="other"),
+        sa.Column(
+            "created_when",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=func.now(),
+        ),
+        sa.Column(
+            "modified_when",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=func.now(),
+            server_onupdate=func.now(),
+        ),
     )
 
 
 def downgrade():
-    op.drop_table('revenues')
+    op.drop_table("revenues")

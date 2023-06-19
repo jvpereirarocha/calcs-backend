@@ -18,28 +18,28 @@ class CreatePerson(AbstractInputPort):
     def _validate_first_name(self):
         if not self.first_name:
             raise ValueError("First name is required.")
-        
+
     def _validate_last_name(self):
         if not self.last_name:
             raise ValueError("Last name is required.")
-        
+
     def _validate_date_of_birth(self):
         if not self.date_of_birth:
             raise ValueError("Date of birth is required.")
-        
+
     def _convert_date_of_birth(self):
         try:
             converted_date = datetime.strptime(self.date_of_birth, "%d/%m/%Y")
             self.date_of_birth = converted_date.date()
         except ValueError:
             raise ValueError("Date of birth must be in the format DD/MM/YYYY.")
-        
+
     def _convert_str_to_uuid(self):
         try:
             self.person_id = UserUUID(self.user_id)
         except ValueError:
             raise ValueError("User ID must be a valid UUID.")
-        
+
     def validate_request(self):
         self._validate_first_name()
         self._validate_last_name()

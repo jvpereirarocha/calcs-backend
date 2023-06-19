@@ -4,17 +4,18 @@ from typing import Optional
 from libs.types.identifiers import AccountUUID
 from calculations.domain.entities.accounts import Account
 
+
 @pytest.fixture(scope="function")
 def mock_account_generate():
-
     def make_mock(
         id: Optional[AccountUUID] = None,
         number_of_account: Optional[str] = None,
-        amount_on_account: Optional[float] = None
+        amount_on_account: Optional[float] = None,
     ):
         account = Account(
             account_id=id or AccountUUID(),
-            number_of_account=number_of_account or random.choice([str(i) * 5 for i in range(0, 9)]),
+            number_of_account=number_of_account
+            or random.choice([str(i) * 5 for i in range(0, 9)]),
             amount_on_account=amount_on_account or random.uniform(0.0, 100.0),
         )
 

@@ -15,7 +15,7 @@ class UserAndPersonCreated(AbstractOutputPort):
             data = {
                 "success": {
                     "person": self.person.to_dict(),
-                    "user": self.user.to_dict()
+                    "user": self.user.to_dict(),
                 }
             }
             serialized_data = json.dumps(data)
@@ -23,8 +23,4 @@ class UserAndPersonCreated(AbstractOutputPort):
             return serialized_data, self.status_code
         except Exception as error:
             self.status_code = 400
-            return json.dumps({
-                "error": {
-                    "message": str(error)
-                }
-            }), self.status_code
+            return json.dumps({"error": {"message": str(error)}}), self.status_code

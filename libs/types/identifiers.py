@@ -9,7 +9,7 @@ class BaseUUID(UUID):
         elif isinstance(value, (UUID, str)) or issubclass(self.__class__, BaseUUID):
             _id = str(value)
         else:
-            raise ValueError('Invalid value type to use as UUID')
+            raise ValueError("Invalid value type to use as UUID")
 
         super().__init__(_id)
 
@@ -17,17 +17,22 @@ class BaseUUID(UUID):
 class ExpenseUUID(BaseUUID):
     pass
 
+
 class RevenueUUID(BaseUUID):
     pass
+
 
 class BalanceUUID(BaseUUID):
     pass
 
+
 class AccountUUID(BaseUUID):
     pass
 
+
 class PersonUUID(BaseUUID):
     pass
+
 
 class UserUUID(BaseUUID):
     pass

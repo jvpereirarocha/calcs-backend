@@ -13,13 +13,13 @@ from infrastructure.database.orms.orm_balance import balances
 metadata_obj = MetaData()
 
 revenues = CustomTable(
-    'revenues',
+    "revenues",
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", RevenueUUID),
-    CustomColumn('description', String(255)),
-    CustomColumn('value', Float(asdecimal=True)),
-    CustomColumn('date_of_receivment', DateTime, default=datetime.utcnow),
-    CustomColumn('category', String(100), default='other'),
-    CustomColumn('person_id', ForeignKey(persons.c.id, ondelete="CASCADE")),
-    CustomColumn('balance_id', ForeignKey(balances.c.id, ondelete="CASCADE")),
+    CustomColumn("description", String(255)),
+    CustomColumn("value", Float(asdecimal=True)),
+    CustomColumn("date_of_receivment", DateTime, default=datetime.utcnow),
+    CustomColumn("category", String(100), default="other"),
+    CustomColumn("person_id", ForeignKey(persons.c.id, ondelete="CASCADE")),
+    CustomColumn("balance_id", ForeignKey(balances.c.id, ondelete="CASCADE")),
 )

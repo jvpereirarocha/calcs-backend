@@ -11,6 +11,7 @@ from libs.types.identifiers import PersonUUID, UserUUID
 
 profile_blueprint = Blueprint("profile", __name__, url_prefix="/profile")
 
+
 @profile_blueprint.route("/register", methods=["POST", "OPTIONS"])
 def register_new_profile():
     data = request.get_json()
@@ -19,11 +20,11 @@ def register_new_profile():
         user_id=UserUUID(),
         email=data["email"],
         password=data["password"],
-        avatar=data.get("avatar", None)
+        avatar=data.get("avatar", None),
     )
 
     user_requester.validate_request()
-    
+
     profile_repo = ProfileRepo()
     user_service = CreateUserService(requester=user_requester, repo=profile_repo)
     user = user_service.create_or_update()
@@ -33,18 +34,15 @@ def register_new_profile():
         first_name=data["firstName"],
         last_name=data["lastName"],
         date_of_birth=data["dateOfBirth"],
-        user_id=user.user_id
+        user_id=user.user_id,
     )
     person_requester.validate_request()
 
     person_service = CreatePersonService(requester=person_requester, repo=profile_repo)
     person = person_service.create_or_update()
-    
+
     profile_repo.commit()
 
-    output = UserAndPersonCreated(
-        user=user,
-        person=person
-    )
+    output = UserAndPersonCreated(user=user, person=person)
     response, status_code = output.to_json()
     return response, status_code

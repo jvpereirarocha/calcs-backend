@@ -13,23 +13,30 @@ from sqlalchemy import func
 
 
 # revision identifiers, used by Alembic.
-revision = '672acc87c093'
-down_revision = 'db68742ce70e'
+revision = "672acc87c093"
+down_revision = "db68742ce70e"
 branch_labels = None
 depends_on = None
 
 
 def upgrade():
     op.create_table(
-        'accounts',
-        sa.Column('id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-        sa.Column('number_of_account', sa.String(50), nullable=False),
-        sa.Column('amount', sa.String(255), nullable=False),
-        sa.Column('person_id', UUID, sa.ForeignKey('persons.id')),
-        sa.Column('created_when', sa.DateTime(timezone=True), server_default=func.now()),
-        sa.Column('modified_when', sa.DateTime(timezone=True), server_default=func.now(), server_onupdate=func.now()),
+        "accounts",
+        sa.Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column("number_of_account", sa.String(50), nullable=False),
+        sa.Column("amount", sa.String(255), nullable=False),
+        sa.Column("person_id", UUID, sa.ForeignKey("persons.id")),
+        sa.Column(
+            "created_when", sa.DateTime(timezone=True), server_default=func.now()
+        ),
+        sa.Column(
+            "modified_when",
+            sa.DateTime(timezone=True),
+            server_default=func.now(),
+            server_onupdate=func.now(),
+        ),
     )
 
 
 def downgrade():
-    op.drop_table('accounts')
+    op.drop_table("accounts")

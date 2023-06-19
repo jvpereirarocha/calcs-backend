@@ -23,16 +23,18 @@ class User(InheritedModel):
         return bcrypt.hashpw(password=password.encode("utf-8"), salt=salt)
 
     @classmethod
-    def create_user(cls, user_id: UserUUID, email: str, password: str, avatar: Optional[str] = None) -> "User":
+    def create_user(
+        cls, user_id: UserUUID, email: str, password: str, avatar: Optional[str] = None
+    ) -> "User":
         return cls(
             user_id=user_id,
             email=email,
             password=cls._encrypt_password(password=password),
             avatar=avatar,
             created_when=datetime.now(),
-            modified_when=datetime.now()
+            modified_when=datetime.now(),
         )
-    
+
     def update_user(
         self,
         email: Optional[str] = None,
@@ -47,7 +49,7 @@ class User(InheritedModel):
             self.avatar = avatar
 
         self.modified_when = datetime.now()
-    
+
     def to_dict(self) -> Dict[str, str]:
         return {
             "user_id": str(self.user_id),

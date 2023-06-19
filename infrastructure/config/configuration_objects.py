@@ -21,7 +21,6 @@ class TestingConfig(BaseConfig):
     DATABASE_URI = "sqlite:///app-test.db"
 
 
-
 environments = {
     "production": ProductionConfig(),
     "development": DevelopmentConfig(),

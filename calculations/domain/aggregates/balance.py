@@ -45,7 +45,9 @@ class Balance:
         return DateRange(start=self.start_date, end=self.end_date)
 
     def sum_balance_based_on_month_transactions(self) -> float:
-        return (self.total_of_balance + self.sum_of_all_revenues) - self.sum_of_all_expenses_on_month
+        return (
+            self.total_of_balance + self.sum_of_all_revenues
+        ) - self.sum_of_all_expenses_on_month
 
     def balance_with_negative_value(self) -> bool:
         return self.sum_balance_based_on_month_transactions() < 0

@@ -12,10 +12,10 @@ from infrastructure.database.orms.orm_persons import persons
 metadata_obj = MetaData()
 
 accounts = CustomTable(
-    'accounts',
+    "accounts",
     metadata_obj,
     CustomColumn.UUID_as_primary_key("id", AccountUUID),
-    CustomColumn('number_of_account', String(255)),
-    CustomColumn('amount', Float(asdecimal=True)),
-    CustomColumn('person_id', ForeignKey(persons.c.id, ondelete="CASCADE")),
+    CustomColumn("number_of_account", String(255)),
+    CustomColumn("amount", Float(asdecimal=True)),
+    CustomColumn("person_id", ForeignKey(persons.c.id, ondelete="CASCADE")),
 )

@@ -12,7 +12,7 @@ class AbstractCreateOrUpdateService(ABC):
     @abstractmethod
     def create_or_update(self):
         raise NotImplementedError()
-    
+
 
 class AbstractFetchOneService(ABC):
     def __init__(self, repo: AbstractRepo) -> None:
@@ -21,7 +21,7 @@ class AbstractFetchOneService(ABC):
     @abstractmethod
     def fetch_one(self, entity_id: BaseUUID):
         raise NotImplementedError()
-    
+
 
 class AbstractGetAllService(ABC):
     def __init__(self, repo: AbstractRepo) -> None:

@@ -30,7 +30,7 @@ class Person(InheritedModel):
         first_name: str,
         last_name: str,
         date_of_birth: datetime,
-        user_id: Optional[UserUUID] = None
+        user_id: Optional[UserUUID] = None,
     ) -> "Person":
         return cls(
             person_id=person_id,
@@ -39,9 +39,9 @@ class Person(InheritedModel):
             date_of_birth=date_of_birth,
             user_id=user_id,
             created_when=datetime.now(),
-            modified_when=datetime.now()
+            modified_when=datetime.now(),
         )
-    
+
     def update_person(
         self,
         first_name: Optional[str] = None,

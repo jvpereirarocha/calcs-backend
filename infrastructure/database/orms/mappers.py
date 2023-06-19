@@ -28,10 +28,7 @@ def start_mappers():
             # "created_when": accounts.c.created_when,
             # "modified_when": accounts.c.modified_when,
         },
-        exclude_properties={
-            "created_when",
-            "modified_when"
-        }
+        exclude_properties={"created_when", "modified_when"},
     )
 
     mapper_registry.map_imperatively(
@@ -42,20 +39,13 @@ def start_mappers():
             "email": users.c.email,
             "password": users.c.password,
             "avatar": users.c.avatar,
-            "persons": relationship(
-                Person,
-                backref="user",
-                order_by=persons.c.id
-            ),
+            "persons": relationship(Person, backref="user", order_by=persons.c.id),
             # "created_when": users.c.created_when,
             # "modified_when": users.c.modified_when
         },
-        exclude_properties={
-            "created_when",
-            "modified_when"
-        }
+        exclude_properties={"created_when", "modified_when"},
     )
-    
+
     mapper_registry.map_imperatively(
         Person,
         persons,
@@ -64,30 +54,14 @@ def start_mappers():
             "first_name": persons.c.first_name,
             "last_name": persons.c.last_name,
             "date_of_birth": persons.c.date_of_birth,
-            "accounts": relationship(
-                Account,
-                backref="person",
-                order_by=accounts.c.id
-            ),
-            "expenses": relationship(
-                Expense,
-                backref="person",
-                order_by=expenses.c.id
-            ),
-            "revenues": relationship(
-                Revenue,
-                backref="person",
-                order_by=revenues.c.id
-            ),
+            "accounts": relationship(Account, backref="person", order_by=accounts.c.id),
+            "expenses": relationship(Expense, backref="person", order_by=expenses.c.id),
+            "revenues": relationship(Revenue, backref="person", order_by=revenues.c.id),
             # "created_when": persons.c.created_when,
             # "modified_when": persons.c.modified_when,
         },
-        exclude_properties={
-            "created_when",
-            "modified_when"
-        }
+        exclude_properties={"created_when", "modified_when"},
     )
-    
 
     mapper_registry.map_imperatively(
         Expense,
@@ -102,10 +76,7 @@ def start_mappers():
             # "created_when": expenses.c.created_when,
             # "modified_when": expenses.c.modified_when,
         },
-        exclude_properties={
-            "created_when",
-            "modified_when"
-        }
+        exclude_properties={"created_when", "modified_when"},
     )
 
     mapper_registry.map_imperatively(
@@ -120,10 +91,7 @@ def start_mappers():
             # "created_when": revenues.c.created_when,
             # "modified_when": revenues.c.modified_when,
         },
-        exclude_properties={
-            "created_when",
-            "modified_when"
-        }
+        exclude_properties={"created_when", "modified_when"},
     )
 
     mapper_registry.map_imperatively(
@@ -139,20 +107,13 @@ def start_mappers():
             "total_of_balance": balances.c.total_of_balance,
             "status": balances.c.status,
             "expenses": relationship(
-                Expense,
-                backref="balance",
-                order_by=expenses.c.id
+                Expense, backref="balance", order_by=expenses.c.id
             ),
             "revenues": relationship(
-                Revenue,
-                backref="balance",
-                order_by=revenues.c.id
+                Revenue, backref="balance", order_by=revenues.c.id
             ),
             # "created_when": balances.c.created_when,
             # "modified_when": balances.c.modified_when,
         },
-        exclude_properties={
-            "created_when",
-            "modified_when"
-        }
+        exclude_properties={"created_when", "modified_when"},
     )

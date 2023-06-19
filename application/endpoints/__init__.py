@@ -3,4 +3,3 @@ from .profile_api import profile_blueprint
 
 
 api_v1_blueprint.register_blueprint(profile_blueprint)
-

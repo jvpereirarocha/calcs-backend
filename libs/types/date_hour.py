@@ -18,16 +18,18 @@ class DateRange:
             hour=23,
             minute=59,
             second=59,
-            microsecond=999_999
+            microsecond=999_999,
         )
 
     def __new__(cls, start: datetime, end: datetime):
         if start > end:
             raise InvalidDateRange("Invalid DateRange")
-        
+
         return super().__new__(cls)
 
-    def _get_correct_condition(self, start: datetime, end: datetime, consider_last_day: bool = True):
+    def _get_correct_condition(
+        self, start: datetime, end: datetime, consider_last_day: bool = True
+    ):
         if consider_last_day:
             return start <= end
         return start < end
@@ -36,7 +38,9 @@ class DateRange:
         dates = []
         start = self.start
         end = self.end
-        condition = self._get_correct_condition(start=start, end=end, consider_last_day=consider_last_day)
+        condition = self._get_correct_condition(
+            start=start, end=end, consider_last_day=consider_last_day
+        )
         while condition:
             current_date = date(year=start.year, month=start.month, day=start.day)
             yield current_date
@@ -47,6 +51,6 @@ class DateRange:
 
     def __str__(self) -> str:
         return self._texted_format_daterange()
-    
+
     def __repr__(self) -> str:
         return self._texted_format_daterange()
