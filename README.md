@@ -7,9 +7,12 @@ This project was created to manage expenses and incomes. It shows all about expe
 PS: the project is not ready yet
 
 ## Requirements
-- Python 3.10
+- Python 3.11
 - SQLAlchemy 2.0
 - Flask 2.2
 
 ## Architecture
-I'm applying concepts like SOLID, Clean Code and Clean Architecture in this project. I'm very concerned about Software Design Principles to maintain the project structure as simple as possible.
+In this project, I've been using Clean Architecture and Clean Code concepts. The architecture is Hexagonal Architecture using concepts like ports and adapters. The Repository pattern is here, too.
+
+# Docs
+Not ready yet. It's coming...
