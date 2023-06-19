@@ -5,12 +5,12 @@ from typing import Optional, List
 from libs.types.identifiers import UserUUID, PersonUUID
 from calculations.domain.entities.accounts import Account
 from calculations.domain.entities.expenses import Expense
-from calculations.domain.entities.models import BaseModel
+from calculations.domain.entities.models import InheritedModel
 from calculations.domain.entities.revenues import Revenue
 
 
 @dataclass
-class Person(BaseModel):
+class Person(InheritedModel):
     person_id: PersonUUID
     first_name: str
     last_name: str

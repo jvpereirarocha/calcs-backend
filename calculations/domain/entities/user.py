@@ -3,12 +3,12 @@ from datetime import datetime
 from typing import Dict, Optional, List
 
 from libs.types.identifiers import UserUUID
-from calculations.domain.entities.models import BaseModel
+from calculations.domain.entities.models import InheritedModel
 import bcrypt
 
 
 @dataclass
-class User(BaseModel):
+class User(InheritedModel):
     user_id: UserUUID
     email: str
     password: str

@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 @dataclass
-class BaseModel:
+class InheritedModel:
     created_when: datetime
     modified_when: datetime
 

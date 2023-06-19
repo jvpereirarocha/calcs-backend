@@ -3,11 +3,11 @@ from datetime import datetime
 from typing import Optional
 from libs.types.identifiers import PersonUUID, RevenueUUID, BalanceUUID
 
-from calculations.domain.entities.models import BaseModel
+from calculations.domain.entities.models import InheritedModel
 
 
 @dataclass
-class Revenue(BaseModel):
+class Revenue(InheritedModel):
     revenue_id: Optional[RevenueUUID] = None
     description: Optional[str] = None
     value: Optional[float] = None
