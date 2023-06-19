@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from calculations.domain.abstractions.port.abstract_port import AbstractInputPort
 from dataclasses import dataclass
 
@@ -29,7 +29,8 @@ class CreatePerson(AbstractInputPort):
         
     def _convert_date_of_birth(self):
         try:
-            self.date_of_birth = date.strptime(self.date_of_birth, "%d/%m/-%Y")
+            converted_date = datetime.strptime(self.date_of_birth, "%d/%m/%Y")
+            self.date_of_birth = converted_date.date()
         except ValueError:
             raise ValueError("Date of birth must be in the format DD/MM/YYYY.")
         
