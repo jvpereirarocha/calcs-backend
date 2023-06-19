@@ -8,6 +8,7 @@ class UserAndPersonCreated(AbstractOutputPort):
     def __init__(self, person: Person, user: User):
         self.person = person
         self.user = user
+        self.status_code = 200
 
     def to_json(self):
         try:
@@ -19,11 +20,11 @@ class UserAndPersonCreated(AbstractOutputPort):
             }
             serialized_data = json.dumps(data)
             self.status_code = 201
-            return serialized_data
+            return serialized_data, self.status_code
         except Exception as error:
-            self.status_code = 500
+            self.status_code = 400
             return json.dumps({
                 "error": {
                     "message": str(error)
                 }
-            })
+            }), self.status_code
