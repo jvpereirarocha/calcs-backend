@@ -1,6 +1,7 @@
-from typing import Iterable, Optional
+from typing import Iterable, List, Optional
 
 from sqlalchemy import select
+from calculations.domain.entities.models import InheritedModel
 from calculations.domain.entities.person import Person
 from libs.types.identifiers import PersonUUID, UserUUID
 from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import AbstractProfileRepo
@@ -9,6 +10,10 @@ from infrastructure.database.repository.base import SqlBaseRepo
 
 
 class ProfileRepo(SqlBaseRepo, AbstractProfileRepo):
+    def __init__(self):
+        super().__init__()
+        self.objects_to_save: List[InheritedModel] = []
+    
     def get_first_user(self) -> Optional[User]:
         with self:
             query = select(User).order_by(User.email)
@@ -26,7 +31,7 @@ class ProfileRepo(SqlBaseRepo, AbstractProfileRepo):
         
     def save_user(self, user: User) -> None:
         with self:
-            self.session.add(user)
+            self.objects_to_save.append(user)
 
     def get_all_users(self) -> Iterable[User]:
         with self:
@@ -40,7 +45,7 @@ class ProfileRepo(SqlBaseRepo, AbstractProfileRepo):
         
     def save_person(self, person: Person) -> None:
         with self:
-            self.session.add(person)
+            self.objects_to_save.append(person)
         
     def get_person_by_id(self, person_id: PersonUUID) -> Person | None:
         with self:
@@ -53,7 +58,8 @@ class ProfileRepo(SqlBaseRepo, AbstractProfileRepo):
             if user:
                 query = select(Person).where(Person.user_id == user.user_id)
                 return self.session.execute(query).scalar_one_or_none()
-        
-    def commit(self) -> None:
+            
+    def commit(self):
         with self:
+            self.session.bulk_save_objects(self.objects_to_save)
             self.session.commit()
