@@ -27,11 +27,11 @@ def mock_expense_generate(mock_account):
             account_used_on_payment=mock_account,
             category=random.choice(
                 [
-                    ExpenseCategory.food,
-                    ExpenseCategory.entertainment,
-                    ExpenseCategory.health,
-                    ExpenseCategory.other,
-                    ExpenseCategory.transport,
+                    ExpenseCategory.FOOD,
+                    ExpenseCategory.ENTERTEINMENT,
+                    ExpenseCategory.HEALTH,
+                    ExpenseCategory.OTHER,
+                    ExpenseCategory.TRANSPORT,
                 ]
             ),
             created_when=datetime.now(),

@@ -25,9 +25,9 @@ def mock_revenue_generate(mock_account):
             account_of_receivment=mock_account,
             category=random.choice(
                 [
-                    RevenueCategory.salary,
-                    RevenueCategory.investment,
-                    RevenueCategory.other,
+                    RevenueCategory.SALARY,
+                    RevenueCategory.INVESTMENT,
+                    RevenueCategory.OTHER,
                 ]
             ),
             created_when=datetime.now(),
