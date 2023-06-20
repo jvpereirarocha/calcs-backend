@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum, auto
 
 
-class RevenueCategory(str, Enum):
-    salary: str = "salary"
-    investment: str = "investment"
-    other: str = "other"
+class RevenueCategory(StrEnum):
+    SALARY: str = auto()
+    INVESTMENT: str = auto()
+    OTHER: str = auto()

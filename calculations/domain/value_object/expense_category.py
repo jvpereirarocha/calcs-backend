@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import StrEnum, auto
 
 
-class ExpenseCategory(str, Enum):
-    health: str = "health"
-    food: str = "food"
-    entertainment: str = "entertainment"
-    transport: str = "transport"
-    other: str = "other"
+class ExpenseCategory(StrEnum):
+    HEALTH: str = auto()
+    FOOD: str = auto()
+    ENTERTEINMENT: str = auto()
+    TRANSPORT: str = auto()
+    OTHER: str = auto()
