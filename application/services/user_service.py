@@ -1,5 +1,5 @@
 from typing import Iterable
-from application.input_ports.user import CreateUser
+from application.requests.user import CreateUser
 from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import (
     AbstractProfileRepo,
 )

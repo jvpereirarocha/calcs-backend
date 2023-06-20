@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
-from application.input_ports.person import CreatePerson
+from application.requests.person import CreatePerson
 
-from application.input_ports.user import CreateUser
-from application.output_ports.user_and_person_created import UserAndPersonCreated
+from application.requests.user import CreateUser
+from application.responses.user_and_person_created import UserAndPersonCreated
 from application.services.person_service import CreatePersonService
 from application.services.user_service import CreateUserService
 from infrastructure.database.repository.profiles.profile_repo import ProfileRepo

@@ -1,4 +1,4 @@
-from application.input_ports.person import CreatePerson
+from application.requests.person import CreatePerson
 from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import (
     AbstractProfileRepo,
 )

@@ -1,5 +1,5 @@
-from application.input_ports.person import CreatePerson
-from application.input_ports.user import CreateUser
+from application.requests.person import CreatePerson
+from application.requests.user import CreateUser
 from application.services.person_service import CreatePersonService
 from application.services.user_service import CreateUserService
 from calculations.domain.entities.person import Person
