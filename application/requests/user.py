@@ -35,6 +35,9 @@ class LoginRequest(AbstractInputPort, UserValidatorMixin):
         self.validate_email()
         self.validate_password()
         self._validate_request = True
+
+    def validate_request(self):
+        self.validate_login()
     
     def request_is_valid(self):
         return self._validate_request
