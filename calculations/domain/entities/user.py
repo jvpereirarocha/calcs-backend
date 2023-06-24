@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Dict, Optional, List
+from datetime import datetime, timedelta
+from typing import Dict, Optional, List, Self
 
 from libs.types.identifiers import UserUUID
 from calculations.domain.entities.models import InheritedModel
 import bcrypt
+import jwt
 
 
 @dataclass
@@ -18,7 +19,7 @@ class User(InheritedModel):
         return id(self.user_id)
 
     @classmethod
-    def _encrypt_password(self, password: str) -> str:
+    def encrypt_password(self, password: str) -> str:
         salt = bcrypt.gensalt()
         return bcrypt.hashpw(password=password.encode("utf-8"), salt=salt)
 
@@ -29,7 +30,7 @@ class User(InheritedModel):
         return cls(
             user_id=user_id,
             email=email,
-            password=cls._encrypt_password(password=password),
+            password=cls.encrypt_password(password=password),
             avatar=avatar,
             created_when=datetime.now(),
             modified_when=datetime.now(),
@@ -44,11 +45,28 @@ class User(InheritedModel):
         if email:
             self.email = email
         if password:
-            self.password = self._encrypt_password(password=password)
+            self.password = self.encrypt_password(password=password)
         if avatar:
             self.avatar = avatar
 
         self.modified_when = datetime.now()
+
+    def get_expiration_date(self) -> datetime:
+        return datetime.now()
+
+    def get_token(self, secret_key, expiration_in_minutes: int = 60) -> str:
+        expiration_date = self.get_expiration_date() + timedelta(minutes=expiration_in_minutes)
+        return jwt.encode(
+            {
+                "exp": int(expiration_date.timestamp()),
+                "user_id": str(self.user_id),
+                "email": self.email
+            },
+            key=secret_key
+        )
+    
+    def decode_token_and_get_user_information(self, token: str, secret_key: str) -> Dict[str, str]:
+        return jwt.decode(jwt=token, key=secret_key)
 
     def to_dict(self) -> Dict[str, str]:
         return {
