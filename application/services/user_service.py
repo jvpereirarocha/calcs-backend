@@ -1,5 +1,5 @@
-from typing import Iterable
-from application.requests.user import CreateUser
+from typing import Iterable, Optional
+from application.requests.user import CreateUser, LoginRequest
 from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import (
     AbstractProfileRepo,
 )
@@ -9,7 +9,8 @@ from calculations.domain.abstractions.services.abstract_service import (
     AbstractFetchOneService,
 )
 from calculations.domain.entities.user import User
-from libs.types.identifiers import BaseUUID
+from libs.types.identifiers import BaseUUID, UserUUID
+from os import getenv
 
 
 class CreateUserService(AbstractCreateOrUpdateService):
@@ -41,7 +42,30 @@ class CreateUserService(AbstractCreateOrUpdateService):
 
     def create_or_update(self):
         return self._create_new_user()
+    
 
+class LoginService(AbstractFetchOneService):
+    def __init__(self, requester: LoginRequest, repo: AbstractProfileRepo):
+        self.requester = requester
+        self.repo = repo
+
+    def fetch_one(self, entity_id: UserUUID):
+        pass
+
+    def fetch_by_email(self) -> Optional[User]:
+        return self.repo.get_first_user_by_email(
+            email=self.requester.email
+        )
+    
+    def make_login(self) -> Optional[str]:
+        user: Optional[User] = self.fetch_by_email()
+        encrypted_password = User.encrypt_password(
+            password=self.requester.password
+        )
+        if user and user.email == self.requester.email and user.password == encrypted_password:
+            return user.get_token(secret_key=getenv("JWT_SECRET_KEY"))
+        
+            
 
 class GetUsersService(AbstractGetAllService):
     def __init__(self, repo: AbstractProfileRepo) -> None:
