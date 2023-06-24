@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from application.requests.person import CreatePerson
 
-from application.requests.user import CreateUser
+from application.requests.user import CreateUser, LoginRequest
 from application.responses.login_response import LoginResponse
 from application.responses.user_and_person_created import UserAndPersonCreated
 from application.services.person_service import CreatePersonService
@@ -52,12 +52,21 @@ def register_new_profile():
 @profile_blueprint.route("/login", methods=["POST", "OPTIONS"])
 def login():
     data = request.get_json()
-    login_service: LoginService = LoginService(
+    profile_repo = ProfileRepo()
+    login_requester = LoginRequest(
         email=data["email"],
         password=data["password"]
     )
+    login_requester.validate_request()
+    login_service: LoginService = LoginService(
+        requester=login_requester,
+        repo=profile_repo
+    )
     token = login_service.make_login()
-    response = LoginResponse(email=data["email"], token=token)
+    errors = []
+    if login_service.errors:
+        errors = login_service.errors
+    response = LoginResponse(email=data["email"], token=token, errors=errors)
     message, status_code = response.to_json()
     return message, status_code
 
