@@ -1,4 +1,4 @@
-from typing import Iterable, Optional
+from typing import Iterable, List, Optional
 from application.requests.user import CreateUser, LoginRequest
 from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import (
     AbstractProfileRepo,
@@ -45,9 +45,10 @@ class CreateUserService(AbstractCreateOrUpdateService):
     
 
 class LoginService(AbstractFetchOneService):
-    def __init__(self, requester: LoginRequest, repo: AbstractProfileRepo):
+    def __init__(self, requester: LoginRequest, repo: AbstractProfileRepo, errors: List[str] = []):
         self.requester = requester
         self.repo = repo
+        self.errors = errors
 
     def fetch_one(self, entity_id: UserUUID):
         pass
@@ -64,6 +65,9 @@ class LoginService(AbstractFetchOneService):
         )
         if user and user.email == self.requester.email and user.password == encrypted_password:
             return user.get_token(secret_key=getenv("JWT_SECRET_KEY"))
+        else:
+            error = "Invalid credentials"
+            self.errors.append(error)
         
             
 
