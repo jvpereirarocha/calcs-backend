@@ -45,10 +45,10 @@ class CreateUserService(AbstractCreateOrUpdateService):
     
 
 class LoginService(AbstractFetchOneService):
-    def __init__(self, requester: LoginRequest, repo: AbstractProfileRepo, errors: List[str] = []):
+    def __init__(self, requester: LoginRequest, repo: AbstractProfileRepo, error: str):
         self.requester = requester
         self.repo = repo
-        self.errors = errors
+        self.error = error
 
     def fetch_one(self, entity_id: UserUUID):
         pass
@@ -67,7 +67,7 @@ class LoginService(AbstractFetchOneService):
             return user.get_token(secret_key=getenv("JWT_SECRET_KEY"))
         else:
             error = "Invalid credentials"
-            self.errors.append(error)
+            self.error = error
         
             
 
