@@ -13,7 +13,7 @@ from libs.types.identifiers import PersonUUID, UserUUID
 profile_blueprint = Blueprint("profile", __name__, url_prefix="/profile")
 
 
-@profile_blueprint.route("/register", methods=["POST", "OPTIONS"])
+@profile_blueprint.route("/register", methods=["POST"])
 def register_new_profile():
     data = request.get_json()
     # First of all, creating a user
@@ -49,7 +49,7 @@ def register_new_profile():
     return response, status_code
 
 
-@profile_blueprint.route("/login", methods=["POST", "OPTIONS"])
+@profile_blueprint.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
     profile_repo = ProfileRepo()
@@ -60,13 +60,13 @@ def login():
     login_requester.validate_request()
     login_service: LoginService = LoginService(
         requester=login_requester,
-        repo=profile_repo
+        repo=profile_repo,
+        error=''
     )
     token = login_service.make_login()
-    errors = []
-    if login_service.errors:
-        errors = login_service.errors
-    response = LoginResponse(email=data["email"], token=token, errors=errors)
+    if login_service.error:
+        error = login_service.error
+    response = LoginResponse(email=data["email"], token=token, error=error)
     message, status_code = response.to_json()
     return message, status_code
 
