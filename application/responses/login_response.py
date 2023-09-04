@@ -4,15 +4,15 @@ from calculations.domain.abstractions.port.abstract_port import AbstractOutputPo
 
 
 class LoginResponse(AbstractOutputPort):
-    def __init__(self, email: str, token: str, errors: List[str] = []):
+    def __init__(self, email: str, token: str, error: str = ''):
         self.email = email
         self.token = token
-        self.errors = errors
+        self.error = error
         self.status_code = None
 
     def to_json(self):
         try:
-            if not self.errors:
+            if not self.error:
                 data = {
                     "email": self.email,
                     "token": self.token,
@@ -20,7 +20,7 @@ class LoginResponse(AbstractOutputPort):
                 self.status_code = 200
             else:
                 data = {
-                    "errors": [error for error in self.errors] 
+                    "error": self.error 
                 }
                 self.status_code = 400
             serialized_data = json.dumps(data)
