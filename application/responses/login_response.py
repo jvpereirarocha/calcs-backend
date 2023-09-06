@@ -17,14 +17,13 @@ class LoginResponse(AbstractOutputPort):
                     "email": self.email,
                     "token": self.token,
                 }
+                self.success = data
                 self.status_code = 200
             else:
-                data = {
-                    "error": self.error 
-                }
                 self.status_code = 400
-            serialized_data = json.dumps(data)
-            return serialized_data, self.status_code
         except Exception as error:
             self.status_code = 400
-            return json.dumps({"error": {"message": str(error)}}), self.status_code
+            self.error = error
+
+        return self.build_response(), self.status_code
+            
