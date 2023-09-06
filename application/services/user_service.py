@@ -50,8 +50,10 @@ class LoginService(AbstractFetchOneService):
         self.repo = repo
         self.error = error
 
-    def fetch_one(self, entity_id: UserUUID):
-        pass
+    def fetch_one(self, entity_id: UserUUID) -> Optional[User]:
+        return self.repo.get_first_user_by_id(
+            user_id=entity_id
+        )
 
     def fetch_by_email(self) -> Optional[User]:
         return self.repo.get_first_user_by_email(
