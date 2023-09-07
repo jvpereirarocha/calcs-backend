@@ -21,6 +21,7 @@ def register_new_profile():
         user_id=UserUUID(),
         email=data["email"],
         password=data["password"],
+        confirm_password=data["confirmPassword"],
         avatar=data.get("avatar", None),
     )
 
@@ -28,7 +29,10 @@ def register_new_profile():
 
     profile_repo = ProfileRepo()
     user_service = CreateUserService(requester=user_requester, repo=profile_repo)
-    user = user_service.create_or_update()
+    user_request = user_service.create_or_update()
+    if user_request.error:
+        return jsonify({"error": "The user already exists"}), 400
+    user = user_request.user
     # After that, creating a person instance
     person_requester = CreatePerson(
         person_id=PersonUUID(),
@@ -53,20 +57,15 @@ def register_new_profile():
 def login():
     data = request.get_json()
     profile_repo = ProfileRepo()
-    login_requester = LoginRequest(
-        email=data["email"],
-        password=data["password"]
-    )
+    login_requester = LoginRequest(email=data["email"], password=data["password"])
     login_requester.validate_request()
     login_service: LoginService = LoginService(
-        requester=login_requester,
-        repo=profile_repo,
-        error=''
+        requester=login_requester, repo=profile_repo, error=""
     )
     token = login_service.make_login()
+    error = ""
     if login_service.error:
         error = login_service.error
     response = LoginResponse(email=data["email"], token=token, error=error)
     message, status_code = response.to_json()
     return message, status_code
-
