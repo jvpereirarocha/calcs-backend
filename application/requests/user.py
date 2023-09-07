@@ -11,18 +11,21 @@ class CreateUser(AbstractInputPort, UserValidatorMixin):
     user_id: UserUUID
     email: str
     password: str
+    confirm_password: str
     avatar: Optional[str] = None
 
     _valid_request: bool = False
+    _error = ""
 
     def validate_request(self):
         self.validate_email()
         self.validate_password()
+        self.validate_confirm_password()
         self._valid_request = True
 
     def request_is_valid(self):
         return self._valid_request
-    
+
 
 @dataclass
 class LoginRequest(AbstractInputPort, UserValidatorMixin):
@@ -38,6 +41,6 @@ class LoginRequest(AbstractInputPort, UserValidatorMixin):
 
     def validate_request(self):
         self.validate_login()
-    
+
     def request_is_valid(self):
         return self._validate_request
