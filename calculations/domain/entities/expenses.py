@@ -29,7 +29,6 @@ class Expense(InheritedModel):
         balance_id: BalanceUUID,
         already_paid: bool = False,
     ) -> Self:
-
         return cls(
             expense_id=ExpenseUUID(),
             description=description,
@@ -38,5 +37,5 @@ class Expense(InheritedModel):
             already_paid=already_paid,
             person_id=person_id,
             category=category,
-            balance_id=balance_id
+            balance_id=balance_id,
         )

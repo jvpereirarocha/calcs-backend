@@ -14,11 +14,11 @@ class AbstractBalanceRepo(AbstractRepo, ABC):
     @abstractmethod
     def save_revenue(self, revenue: Revenue) -> None:
         raise NotImplementedError()
-    
+
     @abstractmethod
     def save_expense(self, expense: Expense) -> None:
         raise NotImplementedError()
-    
+
     @abstractmethod
     def commit(self) -> None:
         raise NotImplementedError()

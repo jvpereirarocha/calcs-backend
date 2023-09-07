@@ -1,7 +1,7 @@
 from typing import Set
 
 from calculations.domain.abstractions.repository.balances.abstract_repo_balance import (
-    AbstractBalanceRepo
+    AbstractBalanceRepo,
 )
 from calculations.domain.aggregates.balance import Balance
 from calculations.domain.entities.expenses import Expense
@@ -17,13 +17,13 @@ class FakeBalanceRepo(AbstractBalanceRepo):
     @property
     def commited(self):
         return self._commited
-    
+
     def save_expense(self, expense: Expense) -> None:
         self._list_of_objects.append(expense)
-    
+
     def save_revenue(self, revenue: Revenue) -> None:
         self._list_of_objects.append(revenue)
-    
+
     def save_balance(self, balance: Balance) -> None:
         self._list_of_objects.append(balance)
 

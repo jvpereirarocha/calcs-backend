@@ -12,29 +12,36 @@ import jwt
 class User(InheritedModel):
     user_id: UserUUID
     email: str
-    password: str
+    password_hash: bytes
+    password_salt: bytes
     avatar: Optional[str] = None
 
     def __hash__(self) -> int:
         return id(self.user_id)
 
     @classmethod
-    def encrypt_password(self, password: str) -> str:
+    def encrypt_password(cls, password: str) -> tuple[bytes, bytes]:
         salt = bcrypt.gensalt()
-        return bcrypt.hashpw(password=password.encode("utf-8"), salt=salt)
+        generated_password = bcrypt.hashpw(password=password.encode("utf-8"), salt=salt)
+        return generated_password, salt
 
     @classmethod
     def create_user(
         cls, user_id: UserUUID, email: str, password: str, avatar: Optional[str] = None
     ) -> "User":
+        password_hash, password_salt = cls.encrypt_password(password=password)
         return cls(
             user_id=user_id,
             email=email,
-            password=cls.encrypt_password(password=password),
+            password_hash=password_hash,
+            password_salt=password_salt,
             avatar=avatar,
             created_when=datetime.now(),
             modified_when=datetime.now(),
         )
+
+    def check_password(self, password_to_verify: str, encode: str = "utf-8") -> bool:
+        return bcrypt.checkpw(password_to_verify.encode("utf-8"), self.password_hash)
 
     def update_user(
         self,
@@ -55,17 +62,21 @@ class User(InheritedModel):
         return datetime.now()
 
     def get_token(self, secret_key, expiration_in_minutes: int = 60) -> str:
-        expiration_date = self.get_expiration_date() + timedelta(minutes=expiration_in_minutes)
+        expiration_date = self.get_expiration_date() + timedelta(
+            minutes=expiration_in_minutes
+        )
         return jwt.encode(
             {
                 "exp": int(expiration_date.timestamp()),
                 "user_id": str(self.user_id),
-                "email": self.email
+                "email": self.email,
             },
-            key=secret_key
+            key=secret_key,
         )
-    
-    def decode_token_and_get_user_information(self, token: str, secret_key: str) -> Dict[str, str]:
+
+    def decode_token_and_get_user_information(
+        self, token: str, secret_key: str
+    ) -> Dict[str, str]:
         return jwt.decode(jwt=token, key=secret_key)
 
     def to_dict(self) -> Dict[str, str]:
