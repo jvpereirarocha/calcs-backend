@@ -37,7 +37,8 @@ def start_mappers():
         properties={
             "user_id": users.c.id,
             "email": users.c.email,
-            "password": users.c.password,
+            "password_hash": users.c.password_hash,
+            "password_salt": users.c.password_salt,
             "avatar": users.c.avatar,
             "persons": relationship(Person, backref="user", order_by=persons.c.id),
             # "created_when": users.c.created_when,
