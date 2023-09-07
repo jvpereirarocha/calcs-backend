@@ -5,7 +5,7 @@ from calculations.domain.entities.user import User
 
 
 class UserAndPersonCreated(AbstractOutputPort):
-    def __init__(self, person: Person, user: User, error: str = ''):
+    def __init__(self, person: Person, user: User, error: str = ""):
         self.person = person
         self.user = user
         self.status_code = 200
@@ -21,5 +21,5 @@ class UserAndPersonCreated(AbstractOutputPort):
             self.status_code = 400
             data = {"error": self.error}, self.status_code
             # return json.dumps({"error": {"message": str(error)}}), self.status_code
-        
+
         return self.build_response(), self.status_code

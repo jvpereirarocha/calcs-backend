@@ -4,7 +4,7 @@ from calculations.domain.abstractions.port.abstract_port import AbstractOutputPo
 
 
 class LoginResponse(AbstractOutputPort):
-    def __init__(self, email: str, token: str, error: str = ''):
+    def __init__(self, email: str, token: str, error: str = ""):
         self.email = email
         self.token = token
         self.error = error
@@ -26,4 +26,3 @@ class LoginResponse(AbstractOutputPort):
             self.error = error
 
         return self.build_response(), self.status_code
-            
