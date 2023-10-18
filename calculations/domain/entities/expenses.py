@@ -18,6 +18,9 @@ class Expense(InheritedModel):
     category: Optional[str] = None
     balance_id: Optional[BalanceUUID] = None
 
+    def __hash__(self) -> int:
+        return hash(self.expense_id)
+
     @classmethod
     def create_new_expense(
         cls,

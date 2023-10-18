@@ -15,3 +15,6 @@ class Revenue(InheritedModel):
     person_id: Optional[PersonUUID] = None
     category: Optional[str] = None
     balance_id: Optional[BalanceUUID] = None
+
+    def __hash__(self) -> int:
+        return hash(self.revenue_id)
