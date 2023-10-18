@@ -10,6 +10,10 @@ from sqlalchemy import MetaData
 from sqlalchemy import func, util
 from sqlalchemy import types
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import MetaData
+
+
+metadata_base_obj = MetaData()
 
 
 class CustomUUID(types.UserDefinedType):

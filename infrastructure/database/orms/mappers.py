@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy.orm import registry
 from sqlalchemy.orm import relationship
 from infrastructure.database.orms.orm_accounts import accounts
@@ -64,7 +65,7 @@ def start_mappers():
         exclude_properties={"created_when", "modified_when"},
     )
 
-    mapper_registry.map_imperatively(
+    expenses_mapper = mapper_registry.map_imperatively(
         Expense,
         expenses,
         properties={
@@ -74,13 +75,16 @@ def start_mappers():
             "due_date": expenses.c.due_date,
             "already_paid": expenses.c.already_paid,
             "category": expenses.c.category,
+            "balance": relationship(
+                Balance, back_populates="expenses", order_by=revenues.c.id
+            ),
             # "created_when": expenses.c.created_when,
             # "modified_when": expenses.c.modified_when,
         },
         exclude_properties={"created_when", "modified_when"},
     )
 
-    mapper_registry.map_imperatively(
+    revenues_mapper = mapper_registry.map_imperatively(
         Revenue,
         revenues,
         properties={
@@ -89,6 +93,9 @@ def start_mappers():
             "value": revenues.c.value,
             "date_receivment": revenues.c.date_of_receivment,
             "category": revenues.c.category,
+            "balance": relationship(
+                Balance, back_populates="revenues", order_by=revenues.c.id
+            ),
             # "created_when": revenues.c.created_when,
             # "modified_when": revenues.c.modified_when,
         },
@@ -106,12 +113,18 @@ def start_mappers():
             "start_date": balances.c.start_date,
             "end_date": balances.c.end_date,
             "total_of_balance": balances.c.total_of_balance,
-            "status": balances.c.status,
+            "status_balance": balances.c.status_balance,
             "expenses": relationship(
-                Expense, backref="balance", order_by=expenses.c.id
+                expenses_mapper,
+                back_populates="balance",
+                lazy="selectin",
+                order_by=expenses.c.id,
             ),
             "revenues": relationship(
-                Revenue, backref="balance", order_by=revenues.c.id
+                revenues_mapper,
+                back_populates="balance",
+                lazy="selectin",
+                order_by=revenues.c.id,
             ),
             # "created_when": balances.c.created_when,
             # "modified_when": balances.c.modified_when,

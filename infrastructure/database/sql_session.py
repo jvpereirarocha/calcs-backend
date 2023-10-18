@@ -11,4 +11,6 @@ DATABASE_URL = environ.get("DATABASE_URI")
 ENGINE = create_engine(url=DATABASE_URL)
 
 
-DEFAULT_SQL_SESSION = sessionmaker(bind=ENGINE, autocommit=False, expire_on_commit=True)
+DEFAULT_SQL_SESSION = sessionmaker(
+    bind=ENGINE, autocommit=False, expire_on_commit=False
+)

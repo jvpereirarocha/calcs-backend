@@ -33,7 +33,7 @@ def upgrade():
         sa.Column("end_date", sa.Date, nullable=False),
         sa.Column(
             "status_balance",
-            ENUM(name="balance_status"),
+            ENUM("initial", "on_process", "finished", name="balance_status"),
             nullable=False,
             default="initial",
         ),

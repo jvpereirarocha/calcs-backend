@@ -4,17 +4,19 @@ from sqlalchemy import DateTime
 from sqlalchemy import String, Float
 from sqlalchemy import ForeignKey
 from sqlalchemy import MetaData
-from infrastructure.database.orms.orm_base import CustomColumn, CustomTable
+from infrastructure.database.orms.orm_base import (
+    CustomColumn,
+    CustomTable,
+    metadata_base_obj,
+)
 from libs.types.identifiers import ExpenseUUID
 from infrastructure.database.orms.orm_persons import persons
 from infrastructure.database.orms.orm_balance import balances
 
 
-metadata_obj = MetaData()
-
 expenses = CustomTable(
     "expenses",
-    metadata_obj,
+    metadata_base_obj,
     CustomColumn.UUID_as_primary_key("id", ExpenseUUID),
     CustomColumn("description", String(255)),
     CustomColumn("value", Float(asdecimal=True)),

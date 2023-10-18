@@ -1,3 +1,6 @@
+from typing import Optional, Set
+
+from sqlalchemy import select
 from calculations.domain.abstractions.repository.balances.abstract_repo_balance import (
     AbstractBalanceRepo,
 )
@@ -9,21 +12,36 @@ from infrastructure.database.repository.base import SqlBaseRepo
 
 class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
     def __init__(self):
-        self.objects_of_balance = set()
+        super().__init__()
+        self.objects_of_expenses: Set[Expense] = set()
+        self.objects_of_revenues: Set[Revenue] = set()
+        self.balance_to_save: Balance | None = None
+
+    def get_balance_by_month_and_year(self, month: int, year: int) -> Optional[Balance]:
+        with self:
+            query = (
+                select(Balance, Expense)
+                .join(Balance.expenses)
+                .where(Balance.month == month, Balance.year == year)
+            )
+            balance = self.session.execute(query).scalar_one_or_none()
+
+        return balance
 
     def save_balance(self, balance: Balance) -> None:
-        self.objects_of_balance.add(balance)
+        revenues = balance.revenues
+        expenses = balance.expenses
+        self.objects_of_revenues.update(revenues)
+        self.objects_of_expenses.update(expenses)
+        self.balance_to_save = balance
 
-    def save_revenue(self, revenue: Revenue) -> None:
-        with self:
-            self.session.add(revenue)
+    def add_revenue(self, revenue: Revenue) -> None:
+        self.objects_of_revenues.add(revenue)
 
-    def save_expense(self, expense: Expense) -> None:
-        with self:
-            self.session.add(expense)
+    def add_expense(self, expense: Expense) -> None:
+        self.objects_of_expenses.add(expense)
 
     def commit(self):
-        list_of_objects = list(self.objects_of_balance)
         with self:
-            self.session.bulk_save_objects(list_of_objects)
+            self.session.add(self.balance_to_save)
             self.session.commit()
