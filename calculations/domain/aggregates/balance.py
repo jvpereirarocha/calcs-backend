@@ -23,14 +23,17 @@ class Balance:
     start_date: date
     end_date: date
     total_of_balance: float
-    expenses: Optional[List[Expense]] = field(default_factory=list)
-    revenues: Optional[List[Revenue]] = field(default_factory=list)
+    expenses: Optional[list[Expense]] = field(default_factory=list)
+    revenues: Optional[list[Revenue]] = field(default_factory=list)
     status_balance: str = StatusBalance.INITIAL.value
     created_when: Optional[datetime] = None
     modified_when: Optional[datetime] = None
 
+    def __hash__(self) -> int:
+        return hash(self.balance_id)
+
     def __str__(self):
-        return f"<Balance of {self.month}/{self.year} amount - R$: {self.value}"
+        return f"<Balance of {self.month}/{self.year}>"
 
     @property
     def sum_of_all_expenses_on_month(self) -> float:
