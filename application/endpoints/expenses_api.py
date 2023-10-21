@@ -67,3 +67,16 @@ def create_new_expense():
     balance_repo.commit()
 
     return jsonify(data), 201
+
+
+@expenses_blueprint.route("/remove/<string:expense_id>", methods=["DELETE"])
+def remove_expense(expense_id: str):
+    balance_repo = BalanceRepo()
+    expense = balance_repo.get_expense_by_id(expense_id=expense_id)
+    if not expense:
+        return jsonify({"message": "Despesa Não encontrada"}), 404
+
+    balance_repo.remove_expense(expense=expense)
+    balance_repo.commit()
+
+    return jsonify({}), 204
