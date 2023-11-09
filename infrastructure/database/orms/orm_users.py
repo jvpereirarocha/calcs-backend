@@ -1,4 +1,4 @@
-from sqlalchemy import DateTime
+from sqlalchemy import Index
 from sqlalchemy import String
 from sqlalchemy import LargeBinary
 from sqlalchemy import MetaData
@@ -18,4 +18,8 @@ users = CustomTable(
     CustomColumn("password_hash", LargeBinary(60)),
     CustomColumn("password_salt", LargeBinary(29)),
     CustomColumn("avatar", String(255), nullable=True),
+    Index("idx_user_id", "id"),
+    Index("idx_user_email", "email"),
+    Index("idx_user_avatar", "avatar"),
+    Index("idx_user_email_avatar", "email", "avatar")
 )

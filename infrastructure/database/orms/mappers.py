@@ -1,6 +1,7 @@
 from typing import List
 from sqlalchemy.orm import registry
 from sqlalchemy.orm import relationship
+from calculations.domain.entities.models import InheritedModel
 from infrastructure.database.orms.orm_accounts import accounts
 from infrastructure.database.orms.orm_balance import balances
 from infrastructure.database.orms.orm_expenses import expenses
@@ -19,17 +20,15 @@ mapper_registry = registry()
 
 def start_mappers():
     print("Init the mappers")
-    mapper_registry.map_imperatively(
+    accounts_mapper = mapper_registry.map_imperatively(
         Account,
         accounts,
         properties={
             "account_id": accounts.c.id,
             "number_of_account": accounts.c.number_of_account,
             "amount": accounts.c.amount,
-            # "created_when": accounts.c.created_when,
-            # "modified_when": accounts.c.modified_when,
+            "person": relationship(Person, back_populates="accounts", order_by=persons.c.id)
         },
-        exclude_properties={"created_when", "modified_when"},
     )
 
     mapper_registry.map_imperatively(
@@ -41,28 +40,8 @@ def start_mappers():
             "password_hash": users.c.password_hash,
             "password_salt": users.c.password_salt,
             "avatar": users.c.avatar,
-            "persons": relationship(Person, backref="user", order_by=persons.c.id),
-            # "created_when": users.c.created_when,
-            # "modified_when": users.c.modified_when
+            "person": relationship(Person, backref="user", order_by=persons.c.id),
         },
-        exclude_properties={"created_when", "modified_when"},
-    )
-
-    mapper_registry.map_imperatively(
-        Person,
-        persons,
-        properties={
-            "person_id": persons.c.id,
-            "first_name": persons.c.first_name,
-            "last_name": persons.c.last_name,
-            "date_of_birth": persons.c.date_of_birth,
-            "accounts": relationship(Account, backref="person", order_by=accounts.c.id),
-            "expenses": relationship(Expense, backref="person", order_by=expenses.c.id),
-            "revenues": relationship(Revenue, backref="person", order_by=revenues.c.id),
-            # "created_when": persons.c.created_when,
-            # "modified_when": persons.c.modified_when,
-        },
-        exclude_properties={"created_when", "modified_when"},
     )
 
     expenses_mapper = mapper_registry.map_imperatively(
@@ -76,12 +55,9 @@ def start_mappers():
             "already_paid": expenses.c.already_paid,
             "category": expenses.c.category,
             "balance": relationship(
-                Balance, back_populates="expenses", order_by=revenues.c.id
+                Balance, back_populates="expenses", order_by=expenses.c.id
             ),
-            # "created_when": expenses.c.created_when,
-            # "modified_when": expenses.c.modified_when,
         },
-        exclude_properties={"created_when", "modified_when"},
     )
 
     revenues_mapper = mapper_registry.map_imperatively(
@@ -96,13 +72,10 @@ def start_mappers():
             "balance": relationship(
                 Balance, back_populates="revenues", order_by=revenues.c.id
             ),
-            # "created_when": revenues.c.created_when,
-            # "modified_when": revenues.c.modified_when,
         },
-        exclude_properties={"created_when", "modified_when"},
     )
 
-    mapper_registry.map_imperatively(
+    balances_mapper = mapper_registry.map_imperatively(
         Balance,
         balances,
         properties={
@@ -126,8 +99,29 @@ def start_mappers():
                 lazy="selectin",
                 order_by=revenues.c.id,
             ),
-            # "created_when": balances.c.created_when,
-            # "modified_when": balances.c.modified_when,
+            "person": relationship(Person, back_populates="balances", order_by=persons.c.id)
         },
-        exclude_properties={"created_when", "modified_when"},
+    )
+
+    mapper_registry.map_imperatively(
+        Person,
+        persons,
+        properties={
+            "person_id": persons.c.id,
+            "first_name": persons.c.first_name,
+            "last_name": persons.c.last_name,
+            "date_of_birth": persons.c.date_of_birth,
+            "accounts": relationship(
+                accounts_mapper,
+                back_populates="person",
+                lazy="selectin",
+                order_by=accounts.c.id,
+            ),
+            "balances": relationship(
+                balances_mapper,
+                back_populates="person",
+                lazy="selectin",
+                order_by=balances.c.id,
+            ),
+        },
     )
