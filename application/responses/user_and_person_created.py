@@ -13,13 +13,12 @@ class UserAndPersonCreated(AbstractOutputPort):
 
     def to_json(self):
         try:
-            self.success = "user saved"
+            self.success = "Perfil criado com sucesso!"
             self.status_code = 201
             data = {"success": self.success}, self.status_code
         except Exception as error:
             self.error = error
             self.status_code = 400
             data = {"error": self.error}, self.status_code
-            # return json.dumps({"error": {"message": str(error)}}), self.status_code
 
         return self.build_response(), self.status_code
