@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional
 from application.requests.user import CreateUser, LoginRequest
 from calculations.domain.abstractions.repository.profiles.abstract_repo_profile import (
     AbstractProfileRepo,
@@ -74,7 +74,11 @@ class LoginService(AbstractFetchOneService):
             error = "Invalid credentials"
             self.error = error
 
-
+    @classmethod
+    def check_token(cls, token: str) -> Dict[str, str]:
+        return User.decode_token_and_get_user_information(token=token, secret_key=getenv("JWT_SECRET_KEY"))
+        
+        
 class GetUsersService(AbstractGetAllService):
     def __init__(self, repo: AbstractProfileRepo) -> None:
         self.repo = repo
