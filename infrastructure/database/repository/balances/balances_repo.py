@@ -7,8 +7,9 @@ from calculations.domain.abstractions.repository.balances.abstract_repo_balance 
 from calculations.domain.aggregates.balance import Balance
 from calculations.domain.entities.expenses import Expense
 from calculations.domain.entities.revenues import Revenue
+from calculations.domain.entities.person import Person
 from infrastructure.database.repository.base import SqlBaseRepo
-from libs.types.identifiers import ExpenseUUID
+from libs.types.identifiers import ExpenseUUID, PersonUUID, UserUUID
 
 
 class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
@@ -20,11 +21,17 @@ class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
         self.revenues_to_delete: Set[Revenue] = set()
         self.expenses_to_delete: Set[Expense] = set()
 
-    def get_balance_by_month_and_year(self, month: int, year: int) -> Optional[Balance]:
+    def get_balance_by_month_year_and_person(self, month: int, year: int, person_id: PersonUUID) -> Optional[Balance]:
         with self:
-            query = select(Balance).where(Balance.month == month, Balance.year == year)
+            query = select(Balance).where(Balance.month == month, Balance.year == year, Balance.person_id == person_id)
             balance = self.session.execute(query).scalar_one_or_none()
 
+        return balance
+    
+    def get_balance_by_expense_id_and_person_id(self, expense_id: ExpenseUUID, person_id: PersonUUID) -> Optional[Balance]:
+        with self:
+            query = select(Balance).where(Balance.expenses.any(Expense.expense_id == expense_id), Balance.person_id == person_id)
+            balance = self.session.execute(query).scalar_one_or_none()
         return balance
 
     def get_expense_by_id(self, expense_id: str) -> Optional[Expense]:
@@ -33,15 +40,34 @@ class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
             expense = self.session.execute(query).scalar_one_or_none()
 
         return expense
+    
+    def get_person_by_user_id(self, user_id: UserUUID) -> Optional[Person]:
+        with self:
+            query = select(Person).where(Person.user_id == user_id)
+            person = self.session.execute(query).scalar_one_or_none()
+        return person
+    
+    def get_all_expenses_by_person_id(self, person_id: PersonUUID) -> Optional[list[Expense]]:
+        with self:
+            query = select(Expense).where(Expense.person_id == person_id).order_by(Expense.description.desc())
+            expenses = self.session.execute(query).scalars().all()
+        return expenses
 
     def remove_expense(self, expense: Expense) -> None:
         self.expenses_to_delete.add(expense)
 
+    def _add_or_update_expense(self) -> None:
+        for expense_to_save in self.expenses_to_save:
+            index = next(
+                (index for index, expense in enumerate(self.balance_to_save.expenses) if expense.expense_id == expense_to_save.expense_id),
+                None
+            )
+            if index is not None:
+                self.balance_to_save.expenses[index] = expense_to_save
+            else:
+                self.balance_to_save.expenses.append(expense_to_save)
+
     def save_balance(self, balance: Balance) -> None:
-        revenues = balance.revenues
-        expenses = balance.expenses
-        self.revenues_to_save.update(revenues)
-        self.expenses_to_save.update(expenses)
         self.balance_to_save = balance
 
     def add_revenue(self, revenue: Revenue) -> None:
