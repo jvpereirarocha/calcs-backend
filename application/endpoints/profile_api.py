@@ -5,6 +5,7 @@ from application.requests.user import CreateUser, LoginRequest
 from application.responses.login_response import LoginResponse
 from application.responses.user_and_person_created import UserAndPersonCreated
 from application.services.person_service import CreatePersonService
+from application.services.token_required_service import token_required
 from application.services.user_service import CreateUserService, LoginService
 from infrastructure.database.repository.profiles.profile_repo import ProfileRepo
 from libs.types.identifiers import PersonUUID, UserUUID
@@ -69,3 +70,13 @@ def login():
     response = LoginResponse(email=data["email"], token=token, error=error)
     message, status_code = response.to_json()
     return message, status_code
+
+
+@profile_blueprint.route("/me", methods=["GET"])
+@token_required
+def get_my_profile(user_info):
+    profile_repo = ProfileRepo()
+    user = profile_repo.get_first_user_by_id(user_id=UserUUID(user_info["user_id"]))
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify({"message": "Token validado com sucesso!!"}), 200
