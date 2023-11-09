@@ -26,7 +26,15 @@ def upgrade():
         sa.Column("password", sa.String(255), nullable=False),
         sa.Column("avatar", sa.String(255), nullable=True),
     )
+    op.create_index("idx_user_id", "users", ["id"])
+    op.create_index("idx_user_email", "users", ["email"])
+    op.create_index("idx_user_avatar", "users", ["avatar"])
+    op.create_index("idx_user_email_avatar", "users", ["email", "avatar"])
 
 
 def downgrade():
+    op.drop_index("idx_user_email_avatar", table_name="users", if_exists=True)
+    op.drop_index("idx_user_avatar", table_name="users", if_exists=True)
+    op.drop_index("idx_user_email", table_name="users", if_exists=True)
+    op.drop_index("idx_user_id", table_name="users", if_exists=True)
     op.drop_table("users")

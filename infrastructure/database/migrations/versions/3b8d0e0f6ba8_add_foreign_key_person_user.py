@@ -20,7 +20,8 @@ depends_on = None
 
 def upgrade():
     op.add_column("persons", Column("user_id", UUID, ForeignKey("users.id")))
-
+    op.create_index("idx_person_user_id", "persons", ["user_id"])
 
 def downgrade():
+    op.drop_index("idx_person_user_id", table_name="persons", if_exists=True)
     op.drop_column("persons", "user_id")

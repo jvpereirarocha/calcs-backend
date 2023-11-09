@@ -24,7 +24,7 @@ def upgrade():
         "accounts",
         sa.Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
         sa.Column("number_of_account", sa.String(50), nullable=False),
-        sa.Column("amount", sa.String(255), nullable=False),
+        sa.Column("amount", sa.Float, nullable=False),
         sa.Column("person_id", UUID, sa.ForeignKey("persons.id")),
         sa.Column(
             "created_when", sa.DateTime(timezone=True), server_default=func.now()
@@ -36,7 +36,17 @@ def upgrade():
             server_onupdate=func.now(),
         ),
     )
+    op.create_unique_constraint("uq_account_number_of_account_person_id", "accounts", ["number_of_account", "person_id"])
+    op.create_index("idx_account_id", "accounts", ["id"])
+    op.create_index("idx_account_number_of_account", "accounts", ["number_of_account"])
+    op.create_index("idx_account_amount", "accounts", ["amount"])
+    op.create_index("idx_account_person_id", "accounts", ["person_id"])
 
 
 def downgrade():
+    op.drop_index("idx_account_id", table_name="accounts", if_exists=True)
+    op.drop_index("idx_account_number_of_account", table_name="accounts", if_exists=True)
+    op.drop_index("idx_account_amount", table_name="accounts", if_exists=True)
+    op.drop_index("idx_account_person_id", table_name="accounts", if_exists=True)
+    op.drop_constraint("uq_account_number_of_account_person_id", "accounts", type_="unique")
     op.drop_table("accounts")
