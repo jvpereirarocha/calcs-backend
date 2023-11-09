@@ -18,7 +18,7 @@ revenues = CustomTable(
     CustomColumn.UUID_as_primary_key("id", RevenueUUID),
     CustomColumn("description", String(255)),
     CustomColumn("value", Float(asdecimal=True)),
-    CustomColumn("date_of_receivment", Date, nullable=True),
+    CustomColumn("date_of_receivment", Date, nullable=False),
     CustomColumn("category", String(100), default="other"),
     CustomColumn("person_id", ForeignKey(persons.c.id, ondelete="CASCADE")),
     CustomColumn("balance_id", ForeignKey(balances.c.id, ondelete="CASCADE")),
