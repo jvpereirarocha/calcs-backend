@@ -35,4 +35,7 @@ class PersonUUID(BaseUUID):
 
 
 class UserUUID(BaseUUID):
-    pass
+    
+    @classmethod
+    def parse_to_user_uuid(self, user_id_as_string: str) -> "UserUUID":
+        return UserUUID(value=user_id_as_string)
