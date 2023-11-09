@@ -4,9 +4,5 @@ from datetime import datetime
 
 @dataclass
 class InheritedModel:
-    created_when: datetime
-    modified_when: datetime
-
-    def __post_init__(self):
-        self.modified_when = datetime.now()
-        self.created_when = datetime.now()
+    created_when: datetime = datetime.now()
+    modified_when: datetime = datetime.now()

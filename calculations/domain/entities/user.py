@@ -10,10 +10,10 @@ import jwt
 
 @dataclass
 class User(InheritedModel):
-    user_id: UserUUID
-    email: str
-    password_hash: bytes
-    password_salt: bytes
+    user_id: Optional[UserUUID] = None
+    email: Optional[str] = ""
+    password_hash: Optional[bytes] = None
+    password_salt: Optional[bytes] = None
     avatar: Optional[str] = None
 
     def __hash__(self) -> int:
@@ -72,12 +72,15 @@ class User(InheritedModel):
                 "email": self.email,
             },
             key=secret_key,
+            algorithm="HS256",
         )
 
+    @classmethod
     def decode_token_and_get_user_information(
-        self, token: str, secret_key: str
+        cls, token: str, secret_key: str
     ) -> Dict[str, str]:
-        return jwt.decode(jwt=token, key=secret_key)
+        result = jwt.decode(jwt=token, key=secret_key, algorithms=["HS256"])
+        return result
 
     def to_dict(self) -> Dict[str, str]:
         return {
