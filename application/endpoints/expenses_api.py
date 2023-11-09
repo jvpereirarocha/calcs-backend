@@ -18,6 +18,9 @@ expenses_blueprint = Blueprint("expenses", __name__, url_prefix="/expenses")
 def create_new_expense(user_info):
     # firstly we'll try to persist the expense
     # if it's ok, we'll refactor the code
+    import ipdb
+
+    ipdb.set_trace()
     data = request.get_json()
 
     balance_repo = BalanceRepo()
@@ -34,11 +37,14 @@ def create_new_expense(user_info):
     month_range = monthrange(year, month)
     last_day_of_month = month_range[1]
 
+    due_date = datetime.strptime(data["dueDate"], "%d/%m/%Y").date()
+    due_date_as_text = "{}/{}/{}".format(due_date.month, due_date.day, due_date.year)
+
     new_expense = Expense(
         expense_id=ExpenseUUID(),
         description=data["description"],
         value=data["value"],
-        due_date=data["dueDate"],
+        due_date=due_date_as_text,
         category=data["category"],
         already_paid=data["alreadyPaid"],
         created_when=datetime.now(),
@@ -58,8 +64,6 @@ def create_new_expense(user_info):
             balance.expenses.append(new_expense)
         else:
             balance.expenses = [new_expense]
-
-        balance_repo.save_balance(balance=balance)
     else:
         balance = Balance(
             balance_id=BalanceUUID(),
