@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
 from datetime import date, datetime
-from typing import Optional, Self
+from typing import List, Optional, Self
 from libs.types.identifiers import BalanceUUID, ExpenseUUID, PersonUUID, RevenueUUID
 from libs.types.date_hour import DateRange
 from calculations.domain.entities.expenses import Expense
@@ -51,9 +51,25 @@ class Balance:
         )
         return round(value, 2)
 
+    def calculate_total_of_expenses(self) -> Decimal:
+        value = Decimal(sum((expense.value for expense in self.expenses), 0))
+        return round(value, 2)
+
+    def calculate_total_of_revenues(self) -> Decimal:
+        value = Decimal(sum((revenue.value for revenue in self.revenues), 0))
+        return round(value, 2)
+
     @property
     def month_balance(self) -> Decimal:
         return self.calculate_total_of_balance()
+
+    @property
+    def expenses_amount(self) -> Decimal:
+        return self.calculate_total_of_expenses()
+
+    @property
+    def revenues_amount(self) -> Decimal:
+        return self.calculate_total_of_revenues()
 
     @property
     def date_range(self):
@@ -78,3 +94,24 @@ class Balance:
 
     def balance_with_negative_value(self) -> bool:
         return self.sum_balance_based_on_month_transactions() < 0
+
+    @classmethod
+    def sum_all_balances_from_list_of_balances(cls, balances: List[Self]) -> Decimal:
+        value = Decimal(
+            sum((float(balance.month_balance) for balance in balances), 0.0)
+        )
+        return round(value, 2)
+
+    @classmethod
+    def sum_all_revenues_from_list_of_balances(cls, balances: List[Self]) -> Decimal:
+        value = Decimal(
+            sum((float(balance.revenues_amount) for balance in balances), 0.0)
+        )
+        return round(value, 2)
+
+    @classmethod
+    def sum_all_expenses_from_list_of_balances(cls, balances: List[Self]) -> Decimal:
+        value = Decimal(
+            sum((float(balance.expenses_amount) for balance in balances), 0.0)
+        )
+        return round(value, 2)
