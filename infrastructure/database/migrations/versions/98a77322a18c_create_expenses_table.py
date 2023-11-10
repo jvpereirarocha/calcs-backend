@@ -50,7 +50,9 @@ def upgrade():
     op.create_index("idx_expense_already_paid", "expenses", ["already_paid"])
     op.create_index("idx_expense_category", "expenses", ["category"])
     op.create_index("idx_expense_person_id", "expenses", ["person_id"])
-    op.create_index("idx_expense_description_value", "expenses", ["description", "value"])
+    op.create_index(
+        "idx_expense_description_value", "expenses", ["description", "value"]
+    )
 
 
 def downgrade():
@@ -61,5 +63,7 @@ def downgrade():
     op.drop_index("idx_expense_already_paid", table_name="expenses", if_exists=True)
     op.drop_index("idx_expense_category", table_name="expenses", if_exists=True)
     op.drop_index("idx_expense_person_id", table_name="expenses", if_exists=True)
-    op.drop_index("idx_expense_description_value", table_name="expenses", if_exists=True)
+    op.drop_index(
+        "idx_expense_description_value", table_name="expenses", if_exists=True
+    )
     op.drop_table("expenses")

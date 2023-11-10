@@ -31,8 +31,9 @@ def upgrade():
     op.create_index("idx_person_first_name", "persons", ["first_name"])
     op.create_index("idx_person_last_name", "persons", ["last_name"])
     op.create_index("idx_person_date_of_birth", "persons", ["date_of_birth"])
-    op.create_index("idx_person_first_name_last_name", "persons", ["first_name", "last_name"])
-    
+    op.create_index(
+        "idx_person_first_name_last_name", "persons", ["first_name", "last_name"]
+    )
 
 
 def downgrade():

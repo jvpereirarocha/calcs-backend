@@ -52,7 +52,9 @@ def upgrade():
     op.create_index("idx_balance_month", "balances", ["month"])
     op.create_index("idx_balance_year", "balances", ["year"])
     op.create_index("idx_balance_month_year", "balances", ["month", "year"])
-    op.create_index("idx_balance_start_date_end_date", "balances", ["start_date", "end_date"])
+    op.create_index(
+        "idx_balance_start_date_end_date", "balances", ["start_date", "end_date"]
+    )
     op.create_index("idx_balance_total_of_balance", "balances", ["total_of_balance"])
     op.create_index("idx_balance_status_balance", "balances", ["status_balance"])
 
@@ -63,7 +65,9 @@ def downgrade():
     op.drop_index("idx_balance_month", table_name="balances", if_exists=True)
     op.drop_index("idx_balance_year", table_name="balances", if_exists=True)
     op.drop_index("idx_balance_month_year", table_name="balances", if_exists=True)
-    op.drop_index("idx_balance_start_date_end_date", table_name="balances", if_exists=True)
+    op.drop_index(
+        "idx_balance_start_date_end_date", table_name="balances", if_exists=True
+    )
     op.drop_index("idx_balance_total_of_balance", table_name="balances", if_exists=True)
     op.drop_index("idx_balance_status_balance", table_name="balances", if_exists=True)
     op.drop_table("balances")

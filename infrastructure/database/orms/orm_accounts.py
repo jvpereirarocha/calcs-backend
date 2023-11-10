@@ -22,7 +22,9 @@ accounts = CustomTable(
     CustomColumn("number_of_account", String(255)),
     CustomColumn("amount", Float(asdecimal=True)),
     CustomColumn("person_id", ForeignKey(persons.c.id, ondelete="CASCADE")),
-    UniqueConstraint("number_of_account", "person_id", name="uq_account_number_of_account_person_id"),
+    UniqueConstraint(
+        "number_of_account", "person_id", name="uq_account_number_of_account_person_id"
+    ),
     Index("idx_account_id", "id"),
     Index("idx_account_number_of_account", "number_of_account"),
     Index("idx_account_amount", "amount"),

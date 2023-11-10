@@ -21,5 +21,5 @@ users = CustomTable(
     Index("idx_user_id", "id"),
     Index("idx_user_email", "email"),
     Index("idx_user_avatar", "avatar"),
-    Index("idx_user_email_avatar", "email", "avatar")
+    Index("idx_user_email_avatar", "email", "avatar"),
 )

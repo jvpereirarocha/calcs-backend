@@ -23,6 +23,7 @@ def upgrade():
     op.create_index("idx_expense_balance_id", "expenses", ["balance_id"])
     op.create_index("idx_revenue_balance_id", "revenues", ["balance_id"])
 
+
 def downgrade():
     op.drop_index("idx_expense_balance_id", table_name="expenses", if_exists=True)
     op.drop_index("idx_revenue_balance_id", table_name="revenues", if_exists=True)

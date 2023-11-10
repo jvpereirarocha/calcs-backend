@@ -36,7 +36,11 @@ def upgrade():
             server_onupdate=func.now(),
         ),
     )
-    op.create_unique_constraint("uq_account_number_of_account_person_id", "accounts", ["number_of_account", "person_id"])
+    op.create_unique_constraint(
+        "uq_account_number_of_account_person_id",
+        "accounts",
+        ["number_of_account", "person_id"],
+    )
     op.create_index("idx_account_id", "accounts", ["id"])
     op.create_index("idx_account_number_of_account", "accounts", ["number_of_account"])
     op.create_index("idx_account_amount", "accounts", ["amount"])
@@ -45,8 +49,12 @@ def upgrade():
 
 def downgrade():
     op.drop_index("idx_account_id", table_name="accounts", if_exists=True)
-    op.drop_index("idx_account_number_of_account", table_name="accounts", if_exists=True)
+    op.drop_index(
+        "idx_account_number_of_account", table_name="accounts", if_exists=True
+    )
     op.drop_index("idx_account_amount", table_name="accounts", if_exists=True)
     op.drop_index("idx_account_person_id", table_name="accounts", if_exists=True)
-    op.drop_constraint("uq_account_number_of_account_person_id", "accounts", type_="unique")
+    op.drop_constraint(
+        "uq_account_number_of_account_person_id", "accounts", type_="unique"
+    )
     op.drop_table("accounts")

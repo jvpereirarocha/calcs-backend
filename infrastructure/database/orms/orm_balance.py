@@ -41,7 +41,9 @@ balances = CustomTable(
     ),
     CustomColumn("created_when", DateTime, nullable=False, default=func.now()),
     CustomColumn("modified_when", DateTime, nullable=False, onupdate=func.now()),
-    UniqueConstraint("month", "year", "person_id", name="uq_balance_month_year_person_id"),
+    UniqueConstraint(
+        "month", "year", "person_id", name="uq_balance_month_year_person_id"
+    ),
     Index("idx_balance_id", "id"),
     Index("idx_balance_description", "description"),
     Index("idx_balance_month", "month"),

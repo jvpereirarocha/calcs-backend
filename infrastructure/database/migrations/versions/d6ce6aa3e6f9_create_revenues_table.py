@@ -45,18 +45,26 @@ def upgrade():
     op.create_index("idx_revenue_id", "revenues", ["id"])
     op.create_index("idx_revenue_description", "revenues", ["description"])
     op.create_index("idx_revenue_value", "revenues", ["value"])
-    op.create_index("idx_revenue_date_of_receivment", "revenues", ["date_of_receivment"])
+    op.create_index(
+        "idx_revenue_date_of_receivment", "revenues", ["date_of_receivment"]
+    )
     op.create_index("idx_revenue_person_id", "revenues", ["person_id"])
     op.create_index("idx_revenue_category", "revenues", ["category"])
-    op.create_index("idx_revenue_description_value", "revenues", ["description", "value"])
+    op.create_index(
+        "idx_revenue_description_value", "revenues", ["description", "value"]
+    )
 
 
 def downgrade():
     op.drop_index("idx_revenue_id", table_name="revenues", if_exists=True)
     op.drop_index("idx_revenue_description", table_name="revenues", if_exists=True)
     op.drop_index("idx_revenue_value", table_name="revenues", if_exists=True)
-    op.drop_index("idx_revenue_date_of_receivment", table_name="revenues", if_exists=True)
+    op.drop_index(
+        "idx_revenue_date_of_receivment", table_name="revenues", if_exists=True
+    )
     op.drop_index("idx_revenue_person_id", table_name="revenues", if_exists=True)
     op.drop_index("idx_revenue_category", table_name="revenues", if_exists=True)
-    op.drop_index("idx_revenue_description_value", table_name="revenues", if_exists=True)
+    op.drop_index(
+        "idx_revenue_description_value", table_name="revenues", if_exists=True
+    )
     op.drop_table("revenues")

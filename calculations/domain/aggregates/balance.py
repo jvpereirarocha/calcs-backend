@@ -44,11 +44,13 @@ class Balance:
     @property
     def sum_of_all_revenues_on_month(self) -> float:
         return sum([revenue.value for revenue in self.revenues])
-    
+
     def calculate_total_of_balance(self) -> Decimal:
-        value = Decimal(self.sum_of_all_revenues_on_month - self.sum_of_all_expenses_on_month)
+        value = Decimal(
+            self.sum_of_all_revenues_on_month - self.sum_of_all_expenses_on_month
+        )
         return round(value, 2)
-    
+
     @property
     def month_balance(self) -> Decimal:
         return self.calculate_total_of_balance()
@@ -56,9 +58,12 @@ class Balance:
     @property
     def date_range(self):
         return DateRange(start=self.start_date, end=self.end_date)
-    
+
     def get_expense_by_id(self, expense_id: ExpenseUUID) -> Optional[Expense]:
-        return next((expense for expense in self.expenses if expense.expense_id == expense_id), None)
+        return next(
+            (expense for expense in self.expenses if expense.expense_id == expense_id),
+            None,
+        )
 
     def sum_balance_based_on_month_transactions(self) -> float:
         return (

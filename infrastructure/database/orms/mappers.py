@@ -27,7 +27,9 @@ def start_mappers():
             "account_id": accounts.c.id,
             "number_of_account": accounts.c.number_of_account,
             "amount": accounts.c.amount,
-            "person": relationship(Person, back_populates="accounts", order_by=persons.c.id)
+            "person": relationship(
+                Person, back_populates="accounts", order_by=persons.c.id
+            ),
         },
     )
 
@@ -99,7 +101,9 @@ def start_mappers():
                 lazy="selectin",
                 order_by=revenues.c.id,
             ),
-            "person": relationship(Person, back_populates="balances", order_by=persons.c.id)
+            "person": relationship(
+                Person, back_populates="balances", order_by=persons.c.id
+            ),
         },
     )
 

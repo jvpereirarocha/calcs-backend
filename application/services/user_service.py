@@ -76,9 +76,11 @@ class LoginService(AbstractFetchOneService):
 
     @classmethod
     def check_token(cls, token: str) -> Dict[str, str]:
-        return User.decode_token_and_get_user_information(token=token, secret_key=getenv("JWT_SECRET_KEY"))
-        
-        
+        return User.decode_token_and_get_user_information(
+            token=token, secret_key=getenv("JWT_SECRET_KEY")
+        )
+
+
 class GetUsersService(AbstractGetAllService):
     def __init__(self, repo: AbstractProfileRepo) -> None:
         self.repo = repo
