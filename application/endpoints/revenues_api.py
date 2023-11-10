@@ -17,9 +17,6 @@ revenues_blueprint = Blueprint("revenues", __name__, url_prefix="/revenues")
 @revenues_blueprint.route("/create", methods=["POST"])
 @token_required
 def create_new_revenue(user_info):
-    import ipdb
-
-    ipdb.set_trace()
     data = request.get_json()
 
     balance_repo = BalanceRepo()
@@ -86,3 +83,21 @@ def create_new_revenue(user_info):
     balance_repo.commit()
 
     return jsonify(data), 201
+
+
+@revenues_blueprint.route("/get_all", methods=["GET"])
+@token_required
+def get_all_revenues_from_user(user_info):
+    user_id = UserUUID.parse_to_user_uuid(user_id_as_string=user_info["user_id"])
+    balance_repo = BalanceRepo()
+    person = balance_repo.get_person_by_user_id(user_id=user_id)
+    if not person:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+
+    revenues = balance_repo.get_all_revenues_by_person_id(person_id=person.person_id)
+    if not revenues:
+        return jsonify({"message": "Nenhuma despesa encontrada"}), 404
+
+    revenues = [revenue.to_dict() for revenue in revenues]
+
+    return jsonify(revenues), 200

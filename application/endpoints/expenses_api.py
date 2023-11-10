@@ -18,9 +18,6 @@ expenses_blueprint = Blueprint("expenses", __name__, url_prefix="/expenses")
 def create_new_expense(user_info):
     # firstly we'll try to persist the expense
     # if it's ok, we'll refactor the code
-    import ipdb
-
-    ipdb.set_trace()
     data = request.get_json()
 
     balance_repo = BalanceRepo()
@@ -141,29 +138,6 @@ def get_all_expenses_from_user(user_info):
     expenses = [expense.to_dict() for expense in expenses]
 
     return jsonify(expenses), 200
-
-
-@expenses_blueprint.route(
-    "/get_balance_of_month/<string:month_and_year>", methods=["GET"]
-)
-@token_required
-def get_total_balance_of_month_and_year(user_info, month_and_year):
-    user_id = UserUUID.parse_to_user_uuid(user_id_as_string=user_info["user_id"])
-    balance_repo = BalanceRepo()
-    person = balance_repo.get_person_by_user_id(user_id=user_id)
-    if not person:
-        return jsonify({"message": "Usuário não encontrado"}), 404
-
-    month, year = month_and_year.split("_")
-    balance = balance_repo.get_balance_by_month_year_and_person(
-        month=int(month), year=int(year), person_id=person.person_id
-    )
-    if not balance:
-        return jsonify({"message": "Saldo não encontrado"}), 404
-
-    month_balance = balance.month_balance
-    response = {"message": f"R$ {month_balance}"}
-    return jsonify(response), 200
 
 
 @expenses_blueprint.route("/remove/<string:expense_id>", methods=["DELETE"])
