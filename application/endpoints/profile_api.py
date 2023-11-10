@@ -72,11 +72,18 @@ def login():
     return message, status_code
 
 
-@profile_blueprint.route("/me", methods=["GET"])
-@token_required
-def get_my_profile(user_info):
+@profile_blueprint.route("get_profile_name", methods=["GET"])
+# @token_required
+def get_profile_name():
     profile_repo = ProfileRepo()
-    user = profile_repo.get_first_user_by_id(user_id=UserUUID(user_info["user_id"]))
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-    return jsonify({"message": "Token validado com sucesso!!"}), 200
+    args = request.args
+    email = args.get("email", None)
+    # user = profile_repo.get_first_user_by_id(user_id=UserUUID(user_info["user_id"]))
+    # if not user:
+    #     return jsonify({"error": "Usuário não encontrado"}), 404
+
+    profile = profile_repo.get_person_by_user_email(email=email)
+    if not profile:
+        return jsonify({"error": "Perfil não encontrado"}), 404
+
+    return jsonify({"success": f"{profile.first_name} {profile.last_name}"}), 200
