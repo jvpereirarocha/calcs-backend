@@ -3,7 +3,7 @@ from decimal import Decimal
 from enum import Enum
 from datetime import date, datetime
 from typing import Optional, Self
-from libs.types.identifiers import BalanceUUID, ExpenseUUID, PersonUUID
+from libs.types.identifiers import BalanceUUID, ExpenseUUID, PersonUUID, RevenueUUID
 from libs.types.date_hour import DateRange
 from calculations.domain.entities.expenses import Expense
 from calculations.domain.entities.revenues import Revenue
@@ -62,6 +62,12 @@ class Balance:
     def get_expense_by_id(self, expense_id: ExpenseUUID) -> Optional[Expense]:
         return next(
             (expense for expense in self.expenses if expense.expense_id == expense_id),
+            None,
+        )
+
+    def get_revenue_by_id(self, revenue_id: RevenueUUID) -> Optional[Revenue]:
+        return next(
+            (revenue for revenue in self.revenues if revenue.revenue_id == revenue_id),
             None,
         )
 
