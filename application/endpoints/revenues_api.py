@@ -2,8 +2,6 @@ from calendar import monthrange
 from datetime import datetime, date
 from decimal import Decimal
 from flask import Blueprint, jsonify, request
-from application.requests.revenues import CreateOrUpdateRevenue
-
 from application.services.token_required_service import token_required
 from calculations.domain.aggregates.balance import Balance, StatusBalance
 from calculations.domain.entities.revenues import Revenue
@@ -34,15 +32,15 @@ def create_new_revenue(user_info):
 
     date_of_receivment = datetime.strptime(data["dateOfReceivment"], "%d/%m/%Y").date()
 
-    date_to_save_as_text = (
-        f"{date_of_receivment.month}/{date_of_receivment.day}/{date_of_receivment.year}"
+    date_as_text = "{}/{}/{}".format(
+        date_of_receivment.month, date_of_receivment.day, date_of_receivment.year
     )
 
     new_revenue = Revenue(
         revenue_id=RevenueUUID(),
         description=data["description"],
         value=Decimal(data["value"]),
-        date_of_receivment=date_to_save_as_text,
+        date_of_receivment=date_as_text,
         category=data["category"],
         created_when=datetime.now(),
         modified_when=datetime.now(),
@@ -85,6 +83,48 @@ def create_new_revenue(user_info):
     return jsonify(data), 201
 
 
+@revenues_blueprint.route("/update/<string:revenue_id>", methods=["PUT"])
+@token_required
+def update_revenue(user_info, revenue_id):
+    data = request.get_json()
+    user_id = UserUUID.parse_to_user_uuid(user_id_as_string=user_info["user_id"])
+    balance_repo = BalanceRepo()
+    person = balance_repo.get_person_by_user_id(user_id=user_id)
+    date_of_receivment_as_text = data["dateOfReceivment"]
+    date_of_receivment = datetime.strptime(
+        date_of_receivment_as_text, "%d/%m/%Y"
+    ).date()
+    date_as_text = "{}/{}/{}".format(
+        date_of_receivment.month, date_of_receivment.day, date_of_receivment.year
+    )
+    revenue_id = RevenueUUID(revenue_id)
+    if not person:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+
+    balance = balance_repo.get_balance_by_revenue_id_and_person_id(
+        revenue_id=revenue_id, person_id=person.person_id
+    )
+
+    if not balance:
+        return jsonify({"message": "Saldo não encontrado"}), 404
+
+    revenue = balance.get_revenue_by_id(revenue_id=revenue_id)
+    if not revenue:
+        return jsonify({"message": "Receita não encontrada"}), 404
+
+    revenue = revenue.update_revenue(
+        description=data["description"],
+        value=Decimal(data["value"]),
+        date_of_receivment=date_as_text,
+        category=data["category"],
+    )
+
+    # at this moment, not commited yet
+    balance_repo.save_balance(balance=balance)
+    balance_repo.commit()
+    return jsonify({"message": f"Receita {revenue.revenue_id} atualizada!"}), 200
+
+
 @revenues_blueprint.route("/get_all", methods=["GET"])
 @token_required
 def get_all_revenues_from_user(user_info):
@@ -101,3 +141,17 @@ def get_all_revenues_from_user(user_info):
     revenues = [revenue.to_dict() for revenue in revenues]
 
     return jsonify(revenues), 200
+
+
+@revenues_blueprint.route("/remove/<string:revenue_id>", methods=["DELETE"])
+@token_required
+def remove_revenue(_, revenue_id: str):
+    balance_repo = BalanceRepo()
+    revenue = balance_repo.get_revenue_by_id(revenue_id=revenue_id)
+    if not revenue:
+        return jsonify({"message": "Receita Não encontrada"}), 404
+
+    balance_repo.remove_revenue(revenue=revenue)
+    balance_repo.commit()
+
+    return jsonify({}), 204
