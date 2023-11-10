@@ -9,7 +9,7 @@ from calculations.domain.entities.expenses import Expense
 from calculations.domain.entities.revenues import Revenue
 from calculations.domain.entities.person import Person
 from infrastructure.database.repository.base import SqlBaseRepo
-from libs.types.identifiers import ExpenseUUID, PersonUUID, UserUUID
+from libs.types.identifiers import ExpenseUUID, PersonUUID, RevenueUUID, UserUUID
 
 
 class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
@@ -45,12 +45,30 @@ class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
             balance = self.session.execute(query).scalar_one_or_none()
         return balance
 
+    def get_balance_by_revenue_id_and_person_id(
+        self, revenue_id: RevenueUUID, person_id: PersonUUID
+    ) -> Optional[Balance]:
+        with self:
+            query = select(Balance).where(
+                Balance.revenues.any(Revenue.revenue_id == revenue_id),
+                Balance.person_id == person_id,
+            )
+            balance = self.session.execute(query).scalar_one_or_none()
+        return balance
+
     def get_expense_by_id(self, expense_id: str) -> Optional[Expense]:
         with self:
             query = select(Expense).where(Expense.expense_id == ExpenseUUID(expense_id))
             expense = self.session.execute(query).scalar_one_or_none()
 
         return expense
+
+    def get_revenue_by_id(self, revenue_id: str) -> Optional[Revenue]:
+        with self:
+            query = select(Revenue).where(Revenue.revenue_id == RevenueUUID(revenue_id))
+            revenue = self.session.execute(query).scalar_one_or_none()
+
+        return revenue
 
     def get_person_by_user_id(self, user_id: UserUUID) -> Optional[Person]:
         with self:
@@ -84,6 +102,9 @@ class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
 
     def remove_expense(self, expense: Expense) -> None:
         self.expenses_to_delete.add(expense)
+
+    def remove_revenue(self, revenue: Revenue) -> None:
+        self.revenues_to_delete.add(revenue)
 
     def _add_or_update_expense(self) -> None:
         for expense_to_save in self.expenses_to_save:
