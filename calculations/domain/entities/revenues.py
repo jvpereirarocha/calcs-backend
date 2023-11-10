@@ -4,6 +4,7 @@ from typing import Optional
 from libs.types.identifiers import PersonUUID, RevenueUUID, BalanceUUID
 
 from calculations.domain.entities.models import InheritedModel
+from calculations.domain.value_object.format import format_to_value
 
 
 @dataclass
@@ -18,3 +19,10 @@ class Revenue(InheritedModel):
 
     def __hash__(self) -> int:
         return hash(self.revenue_id)
+
+    def to_dict(self) -> dict:
+        return {
+            "description": self.description,
+            "value": format_to_value(value=self.value),
+            "category": self.category,
+        }

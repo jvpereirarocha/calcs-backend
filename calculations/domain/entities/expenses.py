@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime, date
 from typing import Optional, Self, Union
-from calculations.domain.value_object.expense_category import ExpenseCategory
+from calculations.domain.value_object.format import format_to_value, format_to_date
 from libs.types.identifiers import ExpenseUUID, PersonUUID, BalanceUUID
 
 from calculations.domain.entities.models import InheritedModel
@@ -45,12 +45,14 @@ class Expense(InheritedModel):
             category=category,
             balance_id=balance_id,
         )
-    
-    def check_if_attribute_was_updated_and_return_the_most_recent(self, old_value: ExpenseType, new_value: ExpenseType) -> ExpenseType:
+
+    def check_if_attribute_was_updated_and_return_the_most_recent(
+        self, old_value: ExpenseType, new_value: ExpenseType
+    ) -> ExpenseType:
         if new_value:
             return new_value
         return old_value
-    
+
     def update_expense(
         self,
         description: Optional[str] = None,
@@ -59,20 +61,33 @@ class Expense(InheritedModel):
         already_paid: Optional[bool] = None,
         category: Optional[str] = None,
     ) -> Self:
-        self.description = self.check_if_attribute_was_updated_and_return_the_most_recent(self.description, description)
-        self.value = self.check_if_attribute_was_updated_and_return_the_most_recent(self.value, value)
-        self.due_date = self.check_if_attribute_was_updated_and_return_the_most_recent(self.due_date, due_date)
-        self.already_paid = self.check_if_attribute_was_updated_and_return_the_most_recent(self.already_paid, already_paid)
-        self.category = self.check_if_attribute_was_updated_and_return_the_most_recent(self.category, category)
+        self.description = (
+            self.check_if_attribute_was_updated_and_return_the_most_recent(
+                self.description, description
+            )
+        )
+        self.value = self.check_if_attribute_was_updated_and_return_the_most_recent(
+            self.value, value
+        )
+        self.due_date = self.check_if_attribute_was_updated_and_return_the_most_recent(
+            self.due_date, due_date
+        )
+        self.already_paid = (
+            self.check_if_attribute_was_updated_and_return_the_most_recent(
+                self.already_paid, already_paid
+            )
+        )
+        self.category = self.check_if_attribute_was_updated_and_return_the_most_recent(
+            self.category, category
+        )
         self.modified_when = datetime.now()
         return self
-        
-    
+
     def to_dict(self) -> dict:
         return {
             "description": self.description,
-            "value": self.value,
-            "dueDate": self.due_date,
+            "value": format_to_value(value=self.value),
+            "dueDate": format_to_date(date_as_object=self.due_date),
             "alreadyPaid": self.already_paid,
             "category": self.category,
         }
