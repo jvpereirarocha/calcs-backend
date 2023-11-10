@@ -1,4 +1,5 @@
-from typing import Optional, Set
+from datetime import date
+from typing import Iterable, Optional, Set
 
 from sqlalchemy import select
 from calculations.domain.abstractions.repository.balances.abstract_repo_balance import (
@@ -33,6 +34,19 @@ class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
             balance = self.session.execute(query).scalar_one_or_none()
 
         return balance
+
+    def get_all_balances_from_year_and_person(
+        self, year: int, person_id: PersonUUID
+    ) -> Iterable[Balance]:
+        with self:
+            query = select(Balance).where(
+                Balance.start_date >= date(year, 1, 1),
+                Balance.end_date <= date(year, 12, 31),
+                Balance.person_id == person_id,
+            )
+            balances = self.session.execute(query).scalars().all()
+
+        return balances
 
     def get_balance_by_expense_id_and_person_id(
         self, expense_id: ExpenseUUID, person_id: PersonUUID
