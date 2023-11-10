@@ -69,7 +69,7 @@ def start_mappers():
             "revenue_id": revenues.c.id,
             "description": revenues.c.description,
             "value": revenues.c.value,
-            "date_receivment": revenues.c.date_of_receivment,
+            "date_of_receivment": revenues.c.date_of_receivment,
             "category": revenues.c.category,
             "balance": relationship(
                 Balance, back_populates="revenues", order_by=revenues.c.id
