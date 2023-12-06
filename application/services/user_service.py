@@ -71,7 +71,7 @@ class LoginService(AbstractFetchOneService):
         ):
             return user.get_token(secret_key=getenv("JWT_SECRET_KEY"))
         else:
-            error = "Invalid credentials"
+            error = "Credencial inválida"
             self.error = error
 
     @classmethod
