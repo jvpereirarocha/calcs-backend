@@ -2,6 +2,7 @@ from functools import wraps
 from calculations.domain.entities.user import User
 from flask import jsonify, request
 from os import getenv
+from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
 
 def token_required(func):
@@ -22,6 +23,10 @@ def token_required(func):
             user = User.decode_token_and_get_user_information(
                 token=token, secret_key=getenv("JWT_SECRET_KEY")
             )
+        except ExpiredSignatureError:
+            return jsonify({"message": "Token expirou"}), 401
+        except InvalidSignatureError:
+            return jsonify({"message": "Token possui assinatura inválida"}), 401
         except:
             return jsonify({"message": "Token é inválido"}), 401
 
