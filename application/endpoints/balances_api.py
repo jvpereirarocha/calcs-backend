@@ -24,8 +24,16 @@ def get_total_balance_of_month(user_info):
         month=int(now.month), year=int(now.year), person_id=person.person_id
     )
 
+    response = {
+        "success": {
+            "expenses": f"R$ 0,00",
+            "revenues": f"R$ 0,00",
+            "balance": f"R$ 0,00",
+        }
+    }
+
     if not balance:
-        return jsonify({"message": "Saldo não encontrado"}), 404
+        return jsonify(response), 200
 
     month_balance = str(balance.month_balance).replace(".", ",")
     month_revenues = str(balance.revenues_amount).replace(".", ",")
@@ -55,9 +63,16 @@ def get_total_balance_of_year(user_info):
             year=int(now.year), person_id=person.person_id
         )
     )
+    response = {
+        "success": {
+            "expenses": f"R$ 0,00",
+            "revenues": f"R$ 0,00",
+            "balance": f"R$ 0,00",
+        }
+    }
 
     if not balances:
-        return jsonify({"message": "Saldo não encontrado"}), 404
+        return jsonify(response), 200
 
     year_balance = str(
         Balance.sum_all_balances_from_list_of_balances(balances=balances)
