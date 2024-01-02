@@ -27,7 +27,7 @@ class Balance:
     expenses: Optional[list[Expense]] = field(default_factory=list)
     revenues: Optional[list[Revenue]] = field(default_factory=list)
     person_id: Optional[PersonUUID] = None
-    status_balance: str = StatusBalance.INITIAL.value
+    status_balance: StatusBalance = StatusBalance.INITIAL
     created_when: Optional[datetime] = None
     modified_when: Optional[datetime] = None
 
