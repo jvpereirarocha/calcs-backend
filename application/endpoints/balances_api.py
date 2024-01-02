@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 from application.services.token_required_service import token_required
 from calculations.domain.aggregates.balance import Balance
@@ -90,4 +90,43 @@ def get_total_balance_of_year(user_info):
             "balance": f"R$ {year_balance}",
         }
     }
+    return jsonify(response), 200
+
+
+@balances_blueprint.route("/get_last_transactions", methods=["GET"])
+@token_required
+def get_last_transactions(user_info):
+    user_id = UserUUID.parse_to_user_uuid(user_id_as_string=user_info["user_id"])
+    args = request.args
+    number_of_transactions = args.get(
+        "numberOfTransactions", 5
+    )  # per default, 5 transactions
+    balance_repo = BalanceRepo()
+    person = balance_repo.get_person_by_user_id(user_id=user_id)
+    now = datetime.now()
+    if not person:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+
+    balance = balance_repo.get_balance_by_month_year_and_person(
+        month=int(now.month), year=int(now.year), person_id=person.person_id
+    )
+
+    if not balance:
+        return jsonify({"message": "Balanço não encontrado"}), 200
+
+    last_transactions = list(
+        balance.get_last_transactions(number_of_transactions=number_of_transactions)
+    )
+    if last_transactions:
+        responses = []
+        for transaction in last_transactions:
+            current_response = Balance.format_response_to_transaction(
+                transaction=transaction
+            )
+            responses.append(current_response)
+
+        response = {"success": responses}
+    else:
+        response = {"success": []}
+
     return jsonify(response), 200
