@@ -54,7 +54,7 @@ def downgrade():
     )
     op.drop_index("idx_account_amount", table_name="accounts", if_exists=True)
     op.drop_index("idx_account_person_id", table_name="accounts", if_exists=True)
-    op.drop_constraint(
-        "uq_account_number_of_account_person_id", "accounts", type_="unique"
+    op.execute(
+        "ALTER TABLE accounts DROP CONSTRAINT IF EXISTS uq_account_number_of_account_person_id"
     )
     op.drop_table("accounts")
