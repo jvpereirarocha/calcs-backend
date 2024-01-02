@@ -115,3 +115,46 @@ class Balance:
             sum((float(balance.expenses_amount) for balance in balances), 0.0)
         )
         return round(value, 2)
+
+    @classmethod
+    def format_response_to_transaction(cls, transaction: Revenue | Expense) -> dict:
+        return {
+            "id": str(transaction.revenue_id)
+            if isinstance(transaction, Revenue)
+            else str(transaction.expense_id),
+            "description": transaction.description,
+            "value": f"R$ {str(round(transaction.value, 2)).replace('.', ',')}",
+            "date": transaction.created_when.strftime("%d/%m/%Y"),
+            "type": "Receita" if isinstance(transaction, Revenue) else "Despesa",
+            "category": transaction.category,
+        }
+
+    def get_last_revenues_in_balance(self, number_of_transactions: int = 5):
+        order_revenues = sorted(
+            self.revenues, key=lambda revenue: revenue.created_when, reverse=True
+        )
+        for revenue in order_revenues[:number_of_transactions]:
+            yield revenue
+
+    def get_last_expenses_in_balance(self, number_of_transactions: int = 5):
+        order_expenses = sorted(
+            self.expenses, key=lambda expense: expense.created_when, reverse=True
+        )
+        for expense in order_expenses[:number_of_transactions]:
+            yield expense
+
+    def get_last_transactions(self, number_of_transactions: int = 5):
+        last_revenues = self.get_last_revenues_in_balance(
+            number_of_transactions=number_of_transactions
+        )
+        last_expenses = self.get_last_expenses_in_balance(
+            number_of_transactions=number_of_transactions
+        )
+        all_transactions = list(last_revenues) + list(last_expenses)
+        order_transactions = sorted(
+            all_transactions,
+            key=lambda transaction: transaction.created_when,
+            reverse=True,
+        )
+        for transaction in order_transactions[:number_of_transactions]:
+            yield transaction
