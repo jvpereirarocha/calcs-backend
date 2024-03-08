@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
 from datetime import date, datetime
-from typing import List, Optional, Self
+from typing import Iterator, List, Optional, Self
 from libs.types.identifiers import BalanceUUID, ExpenseUUID, PersonUUID, RevenueUUID
 from libs.types.date_hour import DateRange
 from calculations.domain.entities.expenses import Expense
@@ -128,6 +128,14 @@ class Balance:
             "type": "Receita" if isinstance(transaction, Revenue) else "Despesa",
             "category": transaction.category,
         }
+    
+    @classmethod
+    def calculate_total_of_transactions(cls, transactions: Iterator[Revenue | Expense]) -> Decimal:
+        total_of_amount = Decimal(0)
+        for transaction in transactions:
+            total_of_amount += transaction.value
+
+        return total_of_amount
 
     def get_last_revenues_in_balance(self, number_of_transactions: int = 5):
         order_revenues = sorted(
