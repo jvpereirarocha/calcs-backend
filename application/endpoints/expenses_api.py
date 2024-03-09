@@ -37,13 +37,17 @@ def create_new_expense(user_info):
     due_date = datetime.strptime(data["dueDate"], "%d/%m/%Y").date()
     due_date_as_text = "{}/{}/{}".format(due_date.month, due_date.day, due_date.year)
 
+    already_paid = False
+    if data["alreadyPaid"] in ["yes", "Yes", "YES", "y", "Y"]:
+        already_paid = True
+
     new_expense = Expense(
         expense_id=ExpenseUUID(),
         description=data["description"],
         value=data["value"],
         due_date=due_date_as_text,
         category=data["category"],
-        already_paid=data["alreadyPaid"],
+        already_paid=already_paid,
         created_when=datetime.now(),
         modified_when=datetime.now(),
         person_id=person_id,

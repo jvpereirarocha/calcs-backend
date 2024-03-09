@@ -128,9 +128,11 @@ class Balance:
             "type": "Receita" if isinstance(transaction, Revenue) else "Despesa",
             "category": transaction.category,
         }
-    
+
     @classmethod
-    def calculate_total_of_transactions(cls, transactions: Iterator[Revenue | Expense]) -> Decimal:
+    def calculate_total_of_transactions(
+        cls, transactions: Iterator[Revenue | Expense]
+    ) -> Decimal:
         total_of_amount = Decimal(0)
         for transaction in transactions:
             total_of_amount += transaction.value

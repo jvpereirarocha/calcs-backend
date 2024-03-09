@@ -2,3 +2,4 @@ FLASK_APP='wsgi:create_app("env")' # replace env by production, testing or devel
 FLASK_ENV=development
 FLASK_DEBUG=1
 DATABASE_URI=driver://user:password@host:port/database
+JWT_SECRET_KEY=mysupersecretkey

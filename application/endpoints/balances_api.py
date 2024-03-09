@@ -125,8 +125,15 @@ def get_last_transactions(user_info):
             )
             responses.append(current_response)
 
-        amount_of_transactions = Balance.calculate_total_of_transactions(transactions=last_transactions)
-        response = {"success": {"lastTransactions": responses, "amount": "R$: {02:f}, {02:f}".format(amount_of_transactions)}}
+        amount_of_transactions = Balance.calculate_total_of_transactions(
+            transactions=last_transactions
+        )
+        response = {
+            "success": {
+                "lastTransactions": responses,
+                "amount": "R$: {02:f}, {02:f}".format(amount_of_transactions),
+            }
+        }
     else:
         response = {"success": {"lastTransactions": [], "amount": "R$ 0,00"}}
 
