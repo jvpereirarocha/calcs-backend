@@ -131,7 +131,7 @@ def get_last_transactions(user_info):
         response = {
             "success": {
                 "lastTransactions": responses,
-                "amount": "R$: {02:f}, {02:f}".format(amount_of_transactions),
+                "amount": Balance.format_to_current_value(value=amount_of_transactions),
             }
         }
     else:
