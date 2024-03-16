@@ -2,11 +2,15 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
 from datetime import date, datetime
+import locale
 from typing import Iterator, List, Optional, Self
 from libs.types.identifiers import BalanceUUID, ExpenseUUID, PersonUUID, RevenueUUID
 from libs.types.date_hour import DateRange
 from calculations.domain.entities.expenses import Expense
 from calculations.domain.entities.revenues import Revenue
+
+
+locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
 
 
 class StatusBalance(Enum):
@@ -138,6 +142,10 @@ class Balance:
             total_of_amount += transaction.value
 
         return total_of_amount
+
+    @classmethod
+    def format_to_current_value(cls, value: Decimal) -> str:
+        return locale.currency(value, grouping=True, symbol=True)
 
     def get_last_revenues_in_balance(self, number_of_transactions: int = 5):
         order_revenues = sorted(
