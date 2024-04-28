@@ -1,6 +1,7 @@
 __pycache__
+.env-*
 .env
-.env.dev
+.env.*
 .vscode
 .pytest_cache
 data/
