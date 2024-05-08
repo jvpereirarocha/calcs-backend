@@ -5,7 +5,8 @@ services:
   calcs-db:
     container_name: dbcalcs
     image: postgres:16.2-alpine3.19
-    env_file: .env-db
+    env_file:
+      - .env
     ports:
       - "5433:5432"
     volumes:
@@ -22,21 +23,19 @@ services:
       - calcs
 
   calcs-api:
-    container_name: backendcals
-    image: jvrochadev/calcsbackend:0.1
+    container_name: backendcalcs
+    image: jvrochadev/calcsbackend:1.0
     ports:
-      - "6002:8000"
-    env_file: .env
-    volumes:
-      - .:/app
+      - "8000:8000"
     networks:
       - calcs
+    volumes:
+      - .:/app
     depends_on:
       - calcs-db
       - calcs-redis
 
 volumes:
-  app: {}
   dbdata: {}
 
 networks:

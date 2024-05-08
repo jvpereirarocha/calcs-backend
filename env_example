@@ -1,5 +1,9 @@
-FLASK_APP='wsgi:create_app("env")' # replace env by production, testing or development
-FLASK_ENV=development
-FLASK_DEBUG=1
-DATABASE_URI=driver://user:password@host:port/database
+FLASK_ENV=development  # production, development or testing
+FLASK_DEBUG=1  # 0 or 1
 JWT_SECRET_KEY=mysupersecretkey
+POSTGRES_PASSWORD=your_password
+POSTGRES_USER=your_user
+POSTGRES_DB=your_dbname
+POSTGRES_PORT=your_port
+DATABASE_DRIVER=your_driver
+DATABASE_HOST=your_host

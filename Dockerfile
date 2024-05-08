@@ -1,4 +1,4 @@
-FROM python:3.11.5-slim
+FROM python:3.11.5-slim as build
 
 # Installing poetry to run the project
 ENV PYTHONUNBUFFERED=1
@@ -29,11 +29,15 @@ COPY poetry.lock pyproject.toml ./
 RUN poetry config virtualenvs.create false
 RUN poetry install
 COPY . .
-ENV FLASK_ENV=${FLASK_ENV:-'production'}
-ENV FLASK_APP="wsgi:create_app(\"${FLASK_ENV}}\")"
-ENV PORT_TO_EXPOSE=8000
 
-EXPOSE ${PORT_TO_EXPOSE}
+RUN groupadd -r admin && useradd -r -g admin admin
+RUN chown -R admin:admin /app
+RUN chown admin:admin /app/entrypoint.sh
+USER admin
+RUN chmod +x /app/entrypoint.sh
+SHELL ["/bin/bash"]
+ENV SERVER_PORT=8000
 
+EXPOSE ${SERVER_PORT}
 
-CMD ["/bin/bash", "-c", "gunicorn --bind 0.0.0.0:${PORT_TO_EXPOSE} --workers 2 'wsgi:create_app(\"${FLASK_ENV}\")'"]
+CMD ["/bin/bash", "entrypoint.sh"]
