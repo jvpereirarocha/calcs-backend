@@ -83,10 +83,10 @@ class Expense(InheritedModel):
         self.modified_when = datetime.now()
         return self
 
-    def to_dict(self) -> dict:
+    def to_dict(self, amount_as_decimal: bool = False) -> dict:
         return {
             "description": self.description,
-            "value": format_to_value(value=self.value),
+            "value": format_to_value(value=self.value, format_as_decimal=amount_as_decimal),
             "dueDate": format_to_date(date_as_object=self.due_date),
             "alreadyPaid": self.already_paid,
             "category": self.category,

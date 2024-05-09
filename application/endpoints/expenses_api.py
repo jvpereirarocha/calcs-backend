@@ -35,11 +35,9 @@ def create_new_expense(user_info):
     last_day_of_month = month_range[1]
 
     due_date = datetime.strptime(data["dueDate"], "%d/%m/%Y").date()
-    due_date_as_text = "{}/{}/{}".format(due_date.month, due_date.day, due_date.year)
+    due_date_as_text = "{}/{}/{}".format(due_date.day, due_date.month, due_date.year)
 
-    already_paid = False
-    if data["alreadyPaid"] in ["yes", "Yes", "YES", "y", "Y"]:
-        already_paid = True
+    already_paid = data.get("alreadyPaid", False)
 
     new_expense = Expense(
         expense_id=ExpenseUUID(),
@@ -104,6 +102,9 @@ def update_expense(user_info, expense_id):
         expense_id=expense_id, person_id=person.person_id
     )
 
+    due_date = datetime.strptime(data["dueDate"], "%d/%m/%Y").date()
+    due_date_as_text = "{}/{}/{}".format(due_date.day, due_date.month, due_date.year)
+
     if not balance:
         return jsonify({"message": "Saldo não encontrado"}), 404
 
@@ -113,8 +114,8 @@ def update_expense(user_info, expense_id):
 
     expense = expense.update_expense(
         description=data["description"],
-        value=Decimal(data["value"]),
-        due_date=data["dueDate"],
+        value=float(data["value"]),
+        due_date=due_date_as_text,
         already_paid=data["alreadyPaid"],
         category=data["category"],
     )
@@ -124,6 +125,32 @@ def update_expense(user_info, expense_id):
     balance_repo.update_balance(balance=balance)  # updating balance total value
     balance_repo.commit()
     return jsonify({"message": f"Despesa {expense.expense_id} atualizada!"}), 200
+
+
+@expenses_blueprint.route("/get_expense/<string:expense_id>", methods=["GET"])
+@token_required
+def fetch_one_expense(user_info, expense_id):
+    expense_id = ExpenseUUID(expense_id)
+    user_id = UserUUID.parse_to_user_uuid(user_id_as_string=user_info["user_id"])
+    balance_repo = BalanceRepo()
+    person = balance_repo.get_person_by_user_id(user_id=user_id)
+    if not person:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+
+    balance = balance_repo.get_balance_by_expense_id_and_person_id(
+        expense_id=expense_id, person_id=person.person_id
+    )
+
+    if not balance:
+        return jsonify({"message": "Saldo não encontrado"}), 404
+    
+    expense = balance.get_expense_by_id(expense_id=expense_id)
+    if not expense:
+        return jsonify({"message": "Despesa não encontrada"}), 404
+    
+    return jsonify({
+        "success": expense.to_dict(amount_as_decimal=True)
+    })
 
 
 @expenses_blueprint.route("/get_all", methods=["GET"])
