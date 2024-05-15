@@ -99,18 +99,18 @@ def update_revenue(user_info, revenue_id):
     )
     revenue_id = RevenueUUID(revenue_id)
     if not person:
-        return jsonify({"message": "Usuário não encontrado"}), 404
+        return jsonify({"error": "Usuário não encontrado"}), 404
 
     balance = balance_repo.get_balance_by_revenue_id_and_person_id(
         revenue_id=revenue_id, person_id=person.person_id
     )
 
     if not balance:
-        return jsonify({"message": "Saldo não encontrado"}), 404
+        return jsonify({"error": "Saldo não encontrado"}), 404
 
     revenue = balance.get_revenue_by_id(revenue_id=revenue_id)
     if not revenue:
-        return jsonify({"message": "Receita não encontrada"}), 404
+        return jsonify({"error": "Receita não encontrada"}), 404
 
     revenue = revenue.update_revenue(
         description=data["description"],
@@ -122,7 +122,7 @@ def update_revenue(user_info, revenue_id):
     # at this moment, not commited yet
     balance_repo.save_balance(balance=balance)
     balance_repo.commit()
-    return jsonify({"message": f"Receita {revenue.revenue_id} atualizada!"}), 200
+    return jsonify({"success": f"Receita {revenue.revenue_id} atualizada!"}), 200
 
 
 @revenues_blueprint.route("/get_all", methods=["GET"])
@@ -132,11 +132,11 @@ def get_all_revenues_from_user(user_info):
     balance_repo = BalanceRepo()
     person = balance_repo.get_person_by_user_id(user_id=user_id)
     if not person:
-        return jsonify({"message": "Usuário não encontrado"}), 404
+        return jsonify({"error": "Usuário não encontrado"}), 404
 
     revenues = balance_repo.get_all_revenues_by_person_id(person_id=person.person_id)
     if not revenues:
-        return jsonify({"message": "Nenhuma receita encontrada"}), 404
+        return jsonify({"error": "Nenhuma receita encontrada"}), 404
 
     revenues = [revenue.to_dict() for revenue in revenues]
 
@@ -149,7 +149,7 @@ def remove_revenue(_, revenue_id: str):
     balance_repo = BalanceRepo()
     revenue = balance_repo.get_revenue_by_id(revenue_id=revenue_id)
     if not revenue:
-        return jsonify({"message": "Receita Não encontrada"}), 404
+        return jsonify({"error": "Receita Não encontrada"}), 404
 
     balance_repo.remove_revenue(revenue=revenue)
     balance_repo.commit()

@@ -18,7 +18,7 @@ def get_total_balance_of_month(user_info):
     person = balance_repo.get_person_by_user_id(user_id=user_id)
     now = datetime.now()
     if not person:
-        return jsonify({"message": "Usuário não encontrado"}), 404
+        return jsonify({"error": "Usuário não encontrado"}), 404
 
     balance = balance_repo.get_balance_by_month_year_and_person(
         month=int(now.month), year=int(now.year), person_id=person.person_id
@@ -56,7 +56,7 @@ def get_total_balance_of_year(user_info):
     person = balance_repo.get_person_by_user_id(user_id=user_id)
     now = datetime.now()
     if not person:
-        return jsonify({"message": "Usuário não encontrado"}), 404
+        return jsonify({"error": "Usuário não encontrado"}), 404
 
     balances = list(
         balance_repo.get_all_balances_from_year_and_person(
@@ -105,14 +105,14 @@ def get_last_transactions(user_info):
     person = balance_repo.get_person_by_user_id(user_id=user_id)
     now = datetime.now()
     if not person:
-        return jsonify({"message": "Usuário não encontrado"}), 404
+        return jsonify({"error": "Usuário não encontrado"}), 404
 
     balance = balance_repo.get_balance_by_month_year_and_person(
         month=int(now.month), year=int(now.year), person_id=person.person_id
     )
 
     if not balance:
-        return jsonify({"message": "Balanço não encontrado"}), 200
+        return jsonify({"error": "Balanço não encontrado"}), 200
 
     last_transactions = list(
         balance.get_last_transactions(number_of_transactions=number_of_transactions)
