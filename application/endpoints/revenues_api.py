@@ -136,7 +136,7 @@ def get_all_revenues_from_user(user_info):
 
     revenues = balance_repo.get_all_revenues_by_person_id(person_id=person.person_id)
     if not revenues:
-        return jsonify({"message": "Nenhuma despesa encontrada"}), 404
+        return jsonify({"message": "Nenhuma receita encontrada"}), 404
 
     revenues = [revenue.to_dict() for revenue in revenues]
 
