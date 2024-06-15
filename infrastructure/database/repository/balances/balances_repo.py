@@ -102,6 +102,25 @@ class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
             expenses = self.session.execute(query).scalars().all()
         return expenses
 
+    def get_expenses_by_person_id_limiting_by_rows(
+        self,
+        person_id: PersonUUID,
+        current_page: int,
+        rows_per_page: int
+    ) -> Optional[Iterable[Expense]]:
+        offset_of_rows = rows_per_page * (current_page - 1)
+        with self:
+            query = (
+                Select(Expense)
+                .where(Expense.person_id == person_id)
+                .order_by(Expense.due_date)
+                .offset(offset_of_rows)
+                .limit(rows_per_page)
+            )
+            expenses = self.session.execute(query).scalars().all()
+
+        return expenses
+
     def get_all_revenues_by_person_id(
         self, person_id: PersonUUID
     ) -> Optional[list[Revenue]]:
@@ -112,6 +131,25 @@ class BalanceRepo(SqlBaseRepo, AbstractBalanceRepo):
                 .order_by(Revenue.description.desc())
             )
             revenues = self.session.execute(query).scalars().all()
+        return revenues
+
+    def get_revenues_by_person_id_limiting_by_rows(
+        self,
+        person_id: PersonUUID,
+        current_page: int,
+        rows_per_page: int
+    ) -> Optional[Iterable[Revenue]]:
+        offset_of_rows = rows_per_page * (current_page - 1)
+        with self:
+            query = (
+                Select(Revenue)
+                .where(Revenue.person_id == person_id)
+                .order_by(Revenue.date_of_receivment)
+                .offset(offset_of_rows)
+                .limit(rows_per_page)
+            )
+            revenues = self.session.execute(query).scalars().all()
+
         return revenues
 
     def remove_expense(self, expense: Expense) -> None:
