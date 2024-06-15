@@ -26,7 +26,7 @@ class CreateUserService(AbstractCreateOrUpdateService):
             email=self.requester.email
         )
         if user_already_exists:
-            self.error = "This user is already registered"
+            self.error = "Um usuário com esse e-mail já foi cadastrado!"
             user_can_be_created = False
 
         return user_can_be_created
