@@ -161,7 +161,7 @@ class Balance:
         for expense in order_expenses[:number_of_transactions]:
             yield expense
 
-    def get_last_transactions(self, number_of_transactions: int = 5):
+    def get_last_transactions(self, number_of_transactions: int = 5) -> Iterator[Revenue | Expense]:
         last_revenues = self.get_last_revenues_in_balance(
             number_of_transactions=number_of_transactions
         )
