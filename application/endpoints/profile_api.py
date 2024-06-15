@@ -26,13 +26,16 @@ def register_new_profile():
         avatar=data.get("avatar", None),
     )
 
-    user_requester.validate_request()
+    try:
+        user_requester.validate_request()
+    except Exception as err:
+        return {"error": err}
 
     profile_repo = ProfileRepo()
     user_service = CreateUserService(requester=user_requester, repo=profile_repo)
     user_request = user_service.create_or_update()
     if user_request.error:
-        return jsonify({"error": "The user already exists"}), 400
+        return jsonify({"error": "O Usuário já existe"}), 400
     user = user_request.user
     # After that, creating a person instance
     person_requester = CreatePerson(

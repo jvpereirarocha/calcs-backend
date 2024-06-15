@@ -156,13 +156,21 @@ def fetch_one_expense(user_info, expense_id):
 @expenses_blueprint.route("/get_all", methods=["GET"])
 @token_required
 def get_all_expenses_from_user(user_info):
+    rows_per_page = args.get("rowsPerPage", None)
+    current_page = args.get("page", None)
     user_id = UserUUID.parse_to_user_uuid(user_id_as_string=user_info["user_id"])
     balance_repo = BalanceRepo()
     person = balance_repo.get_person_by_user_id(user_id=user_id)
     if not person:
         return jsonify({"error": "Usuário não encontrado"}), 404
 
-    expenses = balance_repo.get_all_expenses_by_person_id(person_id=person.person_id)
+    if current_page and rows_per_page:
+        expenses = balance.get_expenses_by_person_id_limiting_by_rows(
+            person_id=person_id
+        )
+    else:
+        expenses = balance_repo.get_all_expenses_by_person_id(person_id=person.person_id)
+
     if not expenses:
         return jsonify({"error": "Nenhuma despesa encontrada"}), 404
 

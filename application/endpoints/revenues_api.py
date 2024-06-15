@@ -128,13 +128,23 @@ def update_revenue(user_info, revenue_id):
 @revenues_blueprint.route("/get_all", methods=["GET"])
 @token_required
 def get_all_revenues_from_user(user_info):
+    current_page = args.get("page", None)
+    rows_per_page = args.get("rowsPerPage", None)
     user_id = UserUUID.parse_to_user_uuid(user_id_as_string=user_info["user_id"])
     balance_repo = BalanceRepo()
     person = balance_repo.get_person_by_user_id(user_id=user_id)
     if not person:
         return jsonify({"error": "Usuário não encontrado"}), 404
 
-    revenues = balance_repo.get_all_revenues_by_person_id(person_id=person.person_id)
+    if current_page and rows_per_page:
+        revenues = balance_repo.get_revenues_by_person_id_limiting_by_rows(
+            person_id=person_id,
+            current_page=current_page,
+            rows_per_page=rows_per_page
+        )
+    else:
+        revenues = balance_repo.get_all_revenues_by_person_id(person_id=person.person_id)
+
     if not revenues:
         return jsonify({"error": "Nenhuma receita encontrada"}), 404
 
